@@ -62,7 +62,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void delete(Long userId) {
-        //Aplicar borrado logico,
+    public void delete(Long userId) throws UserNotFoundException {
+        User user = userRepository.findByIdAndIsActive(userId).orElseThrow(
+                () ->  new UserNotFoundException("User with id: " + userId + " does not exist")
+        );
+
+        user.setActive(false);
     }
 }
