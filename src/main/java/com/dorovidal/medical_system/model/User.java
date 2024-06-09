@@ -31,6 +31,8 @@ public class User implements UserDetails {
 
     private String lastname;
 
+    private boolean isActive;
+
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "user")
     private Set<UserRole> userRoles = new HashSet<>();
 

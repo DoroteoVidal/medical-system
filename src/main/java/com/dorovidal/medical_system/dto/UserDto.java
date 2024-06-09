@@ -26,6 +26,8 @@ public class UserDto {
     @NotBlank
     private String lastname;
 
+    public UserDto() {}
+
     public UserDto(String email, String password, LocalDate dateOfBirth, String name, String lastname) {
         this.email = email;
         this.password = password;

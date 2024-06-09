@@ -3,6 +3,7 @@ package com.dorovidal.medical_system.model;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.time.LocalDate;
 import java.time.LocalTime;
 
 @Entity
@@ -17,7 +18,7 @@ public class MedicalSchedule {
     @ManyToOne(fetch = FetchType.EAGER)
     private Doctor doctor;
 
-    private String dayOfWeek;
+    private LocalDate date;
 
     private LocalTime startOfShift;
 
