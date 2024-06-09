@@ -1,0 +1,13 @@
+version: "3.8"
+services:
+  medical-system:
+    container_name: medical-system-postgres
+    image: postgres
+    ports:
+      - 5442:5432
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: root
+      POSTGRES_DB: db_medical-system
+    volumes:
+      - ./docker-volume/db:/var/lib/postgresql/data
