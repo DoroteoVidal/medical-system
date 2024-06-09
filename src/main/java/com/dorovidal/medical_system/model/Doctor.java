@@ -27,9 +27,14 @@ public class Doctor {
     @OneToOne
     private Specialty specialty;
 
+    private String biography;
+
     private Long phone;
 
     private String email;
+
+    @OneToOne
+    private User user;
 
     @OneToMany(mappedBy = "doctor", cascade = CascadeType.ALL)
     private Set<Shift> shifts = new LinkedHashSet<>();

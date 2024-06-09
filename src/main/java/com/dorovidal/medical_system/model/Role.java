@@ -13,6 +13,7 @@ public class Role {
 
     @Id
     private Long id;
+
     private String type;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "role")

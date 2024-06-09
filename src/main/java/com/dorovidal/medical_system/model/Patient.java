@@ -28,6 +28,9 @@ public class Patient {
 
     private String email;
 
+    @ManyToOne
+    private User user;
+
     @OneToMany(fetch = FetchType.EAGER)
     private Set<MedicalHistory> medicalHistory = new LinkedHashSet<>();
 
