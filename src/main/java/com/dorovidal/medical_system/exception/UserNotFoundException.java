@@ -3,7 +3,7 @@ package com.dorovidal.medical_system.exception;
 public class UserNotFoundException extends Exception {
 
     public UserNotFoundException() {
-        super("There is no user with this id, try again !!");
+        super("User not found or already inactive");
     }
 
     public UserNotFoundException(String message) {
