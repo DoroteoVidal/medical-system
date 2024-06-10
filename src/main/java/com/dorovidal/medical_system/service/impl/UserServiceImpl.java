@@ -21,6 +21,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Service
@@ -77,5 +78,14 @@ public class UserServiceImpl implements UserService {
         userRepository.findByIsActive(userId).orElseThrow(UserDeletedException::new);
 
         user.setActive(false);
+    }
+
+    @Override
+    public List<UserResponseDto> getAll() {
+        return userRepository
+                .findAll()
+                .stream()
+                .map(EntityDtoUtil::toDto)
+                .toList();
     }
 }

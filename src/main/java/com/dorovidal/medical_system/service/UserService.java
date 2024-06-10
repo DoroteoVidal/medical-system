@@ -6,6 +6,9 @@ import com.dorovidal.medical_system.exception.UnderageUserException;
 import com.dorovidal.medical_system.exception.UserDeletedException;
 import com.dorovidal.medical_system.exception.UserFoundException;
 import com.dorovidal.medical_system.exception.UserNotFoundException;
+import org.springframework.http.ResponseEntity;
+
+import java.util.List;
 
 public interface UserService {
 
@@ -14,4 +17,6 @@ public interface UserService {
     UserResponseDto update(Long userId, UserRequestDto userDto) throws UserNotFoundException, UserDeletedException;
 
     void delete(Long userId) throws UserNotFoundException, UserDeletedException;
+
+    List<UserResponseDto> getAll();
 }
