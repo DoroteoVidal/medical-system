@@ -1,6 +1,7 @@
 package com.dorovidal.medical_system.service.impl;
 
 import com.dorovidal.medical_system.dto.UserDto;
+import com.dorovidal.medical_system.exception.UnderageUserException;
 import com.dorovidal.medical_system.exception.UserDeletedException;
 import com.dorovidal.medical_system.exception.UserFoundException;
 import com.dorovidal.medical_system.exception.UserNotFoundException;
@@ -15,11 +16,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.Period;
 import java.util.HashSet;
 import java.util.Set;
 
 @Service
 public class UserServiceImpl implements UserService {
+
+    public static final int ALLOWED_AGE = 18;
 
     @Autowired
     private UserRepository userRepository;
@@ -31,10 +36,12 @@ public class UserServiceImpl implements UserService {
     private PasswordEncoder passwordEncoder;
 
     @Override
-    public UserDto save(UserDto userDto) throws UserFoundException, IllegalArgumentException {
-        userRepository.findUserByEmailIgnoreCase(userDto.getEmail()).orElseThrow(
-                () ->  new UserFoundException("This user already exists")
-        );
+    public UserDto save(UserDto userDto) throws UserFoundException, IllegalArgumentException, UnderageUserException {
+        userRepository.findUserByEmailIgnoreCase(userDto.getEmail()).orElseThrow(UserFoundException::new);
+
+        if(Period.between(userDto.getDateOfBirth(), LocalDate.now()).getYears() < ALLOWED_AGE) {
+            throw new UnderageUserException();
+        }
 
         User user = EntityDtoUtil.toEntity(userDto);
         Role role = roleRepository.findById(3L).orElseThrow(() -> new IllegalArgumentException("Role not found"));
@@ -51,10 +58,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto update(Long userId, UserDto userDto) throws UserNotFoundException, UserDeletedException {
-        userRepository.findById(userId).orElseThrow(
-                () ->  new UserNotFoundException("User with id: " + userId + " does not exist")
-        );
-
+        userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
         userRepository.findByIsActive(userId).orElseThrow(UserDeletedException::new);
 
         User user = EntityDtoUtil.toEntity(userDto);
@@ -66,10 +70,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void delete(Long userId) throws UserNotFoundException, UserDeletedException {
-        User user = userRepository.findById(userId).orElseThrow(
-                () ->  new UserNotFoundException("User with id: " + userId + " does not exist")
-        );
-
+        User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
         userRepository.findByIsActive(userId).orElseThrow(UserDeletedException::new);
 
         user.setActive(false);
