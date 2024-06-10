@@ -1,6 +1,7 @@
 package com.dorovidal.medical_system.service.impl;
 
 import com.dorovidal.medical_system.dto.UserDto;
+import com.dorovidal.medical_system.exception.UserDeletedException;
 import com.dorovidal.medical_system.exception.UserFoundException;
 import com.dorovidal.medical_system.exception.UserNotFoundException;
 import com.dorovidal.medical_system.model.Role;
@@ -31,9 +32,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto save(UserDto userDto) throws UserFoundException, IllegalArgumentException {
-        if (userRepository.findUserByEmailIgnoreCase(userDto.getEmail()).isPresent()) {
-            throw new UserFoundException("This user already exists");
-        }
+        userRepository.findUserByEmailIgnoreCase(userDto.getEmail()).orElseThrow(
+                () ->  new UserFoundException("This user already exists")
+        );
 
         User user = EntityDtoUtil.toEntity(userDto);
         Role role = roleRepository.findById(3L).orElseThrow(() -> new IllegalArgumentException("Role not found"));
@@ -49,10 +50,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDto update(Long userId, UserDto userDto) throws UserNotFoundException {
-        userRepository.findByIdAndIsActive(userId).orElseThrow(
+    public UserDto update(Long userId, UserDto userDto) throws UserNotFoundException, UserDeletedException {
+        userRepository.findById(userId).orElseThrow(
                 () ->  new UserNotFoundException("User with id: " + userId + " does not exist")
         );
+
+        userRepository.findByIsActive(userId).orElseThrow(UserDeletedException::new);
 
         User user = EntityDtoUtil.toEntity(userDto);
         user.setPassword(passwordEncoder.encode(userDto.getPassword()));
@@ -62,10 +65,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void delete(Long userId) throws UserNotFoundException {
-        User user = userRepository.findByIdAndIsActive(userId).orElseThrow(
+    public void delete(Long userId) throws UserNotFoundException, UserDeletedException {
+        User user = userRepository.findById(userId).orElseThrow(
                 () ->  new UserNotFoundException("User with id: " + userId + " does not exist")
         );
+
+        userRepository.findByIsActive(userId).orElseThrow(UserDeletedException::new);
 
         user.setActive(false);
     }
