@@ -1,6 +1,7 @@
 package com.dorovidal.medical_system.service.impl;
 
-import com.dorovidal.medical_system.dto.UserDto;
+import com.dorovidal.medical_system.dto.UserRequestDto;
+import com.dorovidal.medical_system.dto.UserResponseDto;
 import com.dorovidal.medical_system.exception.UnderageUserException;
 import com.dorovidal.medical_system.exception.UserDeletedException;
 import com.dorovidal.medical_system.exception.UserFoundException;
@@ -10,6 +11,7 @@ import com.dorovidal.medical_system.model.User;
 import com.dorovidal.medical_system.model.UserRole;
 import com.dorovidal.medical_system.repository.RoleRepository;
 import com.dorovidal.medical_system.repository.UserRepository;
+import com.dorovidal.medical_system.security.AuthorityConstant;
 import com.dorovidal.medical_system.service.UserService;
 import com.dorovidal.medical_system.util.EntityDtoUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,28 +38,32 @@ public class UserServiceImpl implements UserService {
     private PasswordEncoder passwordEncoder;
 
     @Override
-    public UserDto save(UserDto userDto) throws UserFoundException, IllegalArgumentException, UnderageUserException {
-        userRepository.findUserByEmailIgnoreCase(userDto.getEmail()).orElseThrow(UserFoundException::new);
+    public UserResponseDto save(UserRequestDto userDto) throws UserFoundException, IllegalArgumentException, UnderageUserException {
+        if(userRepository.findUserByEmailIgnoreCase(userDto.getEmail()).isPresent()) {
+            throw new UserFoundException();
+        }
 
         if(Period.between(userDto.getDateOfBirth(), LocalDate.now()).getYears() < ALLOWED_AGE) {
             throw new UnderageUserException();
         }
 
         User user = EntityDtoUtil.toEntity(userDto);
-        Role role = roleRepository.findById(3L).orElseThrow(() -> new IllegalArgumentException("Role not found"));
         Set<UserRole> roles = new HashSet<>();
+        Role role = new Role(3L, AuthorityConstant.PATIENT);
         UserRole userRole = new UserRole(user, role);
         roles.add(userRole);
-        user.setUserRoles(roles);
+        for(UserRole ur : roles) {
+            roleRepository.save(ur.getRole());
+        }
+        user.getUserRoles().addAll(roles);
         user.setPassword(passwordEncoder.encode(userDto.getPassword()));
-        user.setActive(true);
         User savedUser = userRepository.save(user);
 
         return EntityDtoUtil.toDto(savedUser);
     }
 
     @Override
-    public UserDto update(Long userId, UserDto userDto) throws UserNotFoundException, UserDeletedException {
+    public UserResponseDto update(Long userId, UserRequestDto userDto) throws UserNotFoundException, UserDeletedException {
         userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
         userRepository.findByIsActive(userId).orElseThrow(UserDeletedException::new);
 
