@@ -23,6 +23,15 @@ public class UserController {
     @Autowired
     private RoleAuthController roleAuthController;
 
+    @GetMapping("{id}")
+    public ResponseEntity<?> getById(@PathVariable Long id) {
+        try{
+            return ResponseEntity.status(HttpStatus.OK).body(userService.getById(id));
+        } catch (UserNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
+    }
+
     @GetMapping
     public ResponseEntity<List<UserResponseDto>> all() {
         if(roleAuthController.hasPermission(AuthorityConstant.ADMIN)) {

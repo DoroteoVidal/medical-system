@@ -17,4 +17,6 @@ public interface UserService {
     void delete(Long userId) throws UserNotFoundException;
 
     List<UserResponseDto> getAll();
+
+    UserResponseDto getById(Long userId) throws UserNotFoundException;
 }

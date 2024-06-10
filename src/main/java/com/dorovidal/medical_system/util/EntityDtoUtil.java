@@ -10,6 +10,7 @@ public class EntityDtoUtil {
     public static UserResponseDto toDto(User user) {
         UserResponseDto userDto = new UserResponseDto();
         BeanUtils.copyProperties(user, userDto);
+        userDto.setRole(user.getUserRoles().iterator().next().getRole().getType());
 
         return userDto;
     }

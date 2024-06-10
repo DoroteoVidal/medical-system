@@ -90,4 +90,9 @@ public class UserServiceImpl implements UserService {
                 .map(EntityDtoUtil::toDto)
                 .toList();
     }
+
+    @Override
+    public UserResponseDto getById(Long userId) throws UserNotFoundException {
+        return EntityDtoUtil.toDto(userRepository.findById(userId).orElseThrow(UserNotFoundException::new));
+    }
 }
