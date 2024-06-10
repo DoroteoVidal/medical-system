@@ -48,14 +48,11 @@ public class UserServiceImpl implements UserService {
         }
 
         User user = EntityDtoUtil.toEntity(userDto);
+        Role role = roleRepository.findById(3L).orElseThrow(() -> new IllegalArgumentException("Role not found"));
         Set<UserRole> roles = new HashSet<>();
-        Role role = new Role(3L, AuthorityConstant.PATIENT);
         UserRole userRole = new UserRole(user, role);
         roles.add(userRole);
-        for(UserRole ur : roles) {
-            roleRepository.save(ur.getRole());
-        }
-        user.getUserRoles().addAll(roles);
+        user.setUserRoles(roles);
         user.setPassword(passwordEncoder.encode(userDto.getPassword()));
         User savedUser = userRepository.save(user);
 
