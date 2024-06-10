@@ -28,7 +28,7 @@ import java.util.Set;
 public class UserServiceImpl implements UserService {
 
     public static final int ALLOWED_AGE = 18;
-    public static final Long PATIENT_ID = 3L;
+    public static final Long USER_ID = 4L;
 
     @Autowired
     private UserRepository userRepository;
@@ -51,7 +51,7 @@ public class UserServiceImpl implements UserService {
         }
 
         User user = EntityDtoUtil.toEntity(userDto);
-        Role role = roleRepository.findById(PATIENT_ID).orElseThrow(() -> new IllegalArgumentException("Role not found"));
+        Role role = roleRepository.findById(USER_ID).orElseThrow(() -> new IllegalArgumentException("Role not found"));
         Set<UserRole> roles = new HashSet<>();
         UserRole userRole = new UserRole(user, role);
         roles.add(userRole);

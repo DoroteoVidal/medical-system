@@ -7,4 +7,6 @@ public final class AuthorityConstant {
     public static final String ADMIN = "ADMIN"; //1
     public static final String DOCTOR = "DOCTOR"; //2
     public static final String PATIENT = "PATIENT"; //3
+    public static final String USER = "USER"; //4
+
 }

@@ -3,6 +3,7 @@ package com.dorovidal.medical_system.controller;
 import com.dorovidal.medical_system.dto.UserRequestDto;
 import com.dorovidal.medical_system.dto.UserResponseDto;
 import com.dorovidal.medical_system.exception.UserNotFoundException;
+import com.dorovidal.medical_system.security.AuthorityConstant;
 import com.dorovidal.medical_system.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,9 +20,16 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private RoleAuthController roleAuthController;
+
     @GetMapping
     public ResponseEntity<List<UserResponseDto>> all() {
-        return ResponseEntity.status(HttpStatus.OK).body(userService.getAll());
+        if(roleAuthController.hasPermission(AuthorityConstant.ADMIN)) {
+            return ResponseEntity.status(HttpStatus.OK).body(userService.getAll());
+        } else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
     }
 
     @PutMapping("{id}")
