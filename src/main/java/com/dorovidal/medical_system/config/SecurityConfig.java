@@ -38,10 +38,10 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.apply(securityConfigurerAdapter());
         http.csrf(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests(
-                        auth -> auth.requestMatchers("log-in").permitAll()
-                        .requestMatchers("sign-in").permitAll()
-                        .requestMatchers(HttpMethod.OPTIONS).permitAll()
+                .authorizeHttpRequests(auth -> auth
+                                .requestMatchers("log-in").permitAll()
+                                .requestMatchers("sign-in").permitAll()
+                                .requestMatchers(HttpMethod.OPTIONS).permitAll()
                         .anyRequest().authenticated())
                 .anonymous(AbstractHttpConfigurer::disable)
                 .sessionManagement(
@@ -49,7 +49,7 @@ public class SecurityConfig {
                 );
         http.httpBasic(Customizer.withDefaults());
         http.exceptionHandling(
-                handling -> handling.authenticationEntryPoint(unauthorizedEntryPoint())
+                    handling -> handling.authenticationEntryPoint(unauthorizedEntryPoint())
         );
         return http.build();
     }
