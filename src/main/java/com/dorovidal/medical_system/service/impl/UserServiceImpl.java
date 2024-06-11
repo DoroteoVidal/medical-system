@@ -64,7 +64,11 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public UserResponseDto update(Long userId, UserRequestDto userDto) throws UserNotFoundException {
+    public UserResponseDto update(Long userId, UserRequestDto userDto) throws UserNotFoundException, UserFoundException {
+        if(userRepository.findUserByEmailIgnoreCase(userDto.getEmail()).isPresent()) {
+            throw new UserFoundException();
+        }
+
         User user = userRepository.findByIdAndIsActiveTrue(userId).orElseThrow(UserNotFoundException::new);
         BeanUtils.copyProperties(userDto, user);
         user.setPassword(passwordEncoder.encode(userDto.getPassword()));

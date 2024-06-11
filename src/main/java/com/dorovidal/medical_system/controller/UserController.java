@@ -2,6 +2,7 @@ package com.dorovidal.medical_system.controller;
 
 import com.dorovidal.medical_system.dto.UserRequestDto;
 import com.dorovidal.medical_system.dto.UserResponseDto;
+import com.dorovidal.medical_system.exception.UserFoundException;
 import com.dorovidal.medical_system.exception.UserNotFoundException;
 import com.dorovidal.medical_system.security.AuthorityConstant;
 import com.dorovidal.medical_system.service.UserService;
@@ -9,6 +10,7 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,9 +22,6 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @Autowired
-    private RoleAuthController roleAuthController;
-
     @GetMapping("{id}")
     public ResponseEntity<?> getById(@PathVariable Long id) {
         try{
@@ -33,19 +32,17 @@ public class UserController {
     }
 
     @GetMapping
+    @PreAuthorize("hasAnyAuthority(\"" + AuthorityConstant.ADMIN + "\")")
     public ResponseEntity<List<UserResponseDto>> all() {
-        if(roleAuthController.hasPermission(AuthorityConstant.ADMIN)) {
-            return ResponseEntity.status(HttpStatus.OK).body(userService.getAll());
-        } else {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }
+        return ResponseEntity.status(HttpStatus.OK).body(userService.getAll());
     }
 
     @PutMapping("{id}")
+    //@PreAuthorize("#id == authentication.principal.id")
     public ResponseEntity<?> update(@PathVariable Long id, @RequestBody @Valid UserRequestDto userDto) {
         try{
             return ResponseEntity.status(HttpStatus.CREATED).body(userService.update(id, userDto));
-        } catch (UserNotFoundException e) {
+        } catch (UserNotFoundException | UserFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }

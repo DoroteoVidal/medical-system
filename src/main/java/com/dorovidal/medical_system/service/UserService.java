@@ -12,7 +12,7 @@ public interface UserService {
 
     UserResponseDto save(UserRequestDto userDto) throws UserFoundException, IllegalArgumentException, UnderageUserException;
 
-    UserResponseDto update(Long userId, UserRequestDto userDto) throws UserNotFoundException;
+    UserResponseDto update(Long userId, UserRequestDto userDto) throws UserNotFoundException, UserFoundException;
 
     void delete(Long userId) throws UserNotFoundException;
 
