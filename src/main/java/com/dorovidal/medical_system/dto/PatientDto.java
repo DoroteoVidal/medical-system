@@ -1,30 +1,40 @@
 package com.dorovidal.medical_system.dto;
 
-import lombok.Getter;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import lombok.Data;
 
 import java.time.LocalDate;
 
-@Getter
+@Data
 public class PatientDto {
+
+    private Long id;
     private String name;
     private String lastname;
     private LocalDate dateOfBirth;
+
+    @NotBlank
     private String address;
+
     private Long phone;
+
+    @NotBlank
     private String genre;
+
+    @NotNull
     private Long dni;
-    private String email;
 
     public PatientDto() {}
 
-    public PatientDto(String name,
-                      String lastname,
-                      LocalDate dateOfBirth,
-                      String address,
-                      Long phone,
-                      String genre,
-                      Long dni,
-                      String email) {
+    public PatientDto(String address, Long phone, String genre, Long dni) {
+        this.address = address;
+        this.phone = phone;
+        this.genre = genre;
+        this.dni = dni;
+    }
+
+    public PatientDto(String name, String lastname, LocalDate dateOfBirth, String address, Long phone, String genre, Long dni) {
         this.name = name;
         this.lastname = lastname;
         this.dateOfBirth = dateOfBirth;
@@ -32,6 +42,5 @@ public class PatientDto {
         this.phone = phone;
         this.genre = genre;
         this.dni = dni;
-        this.email = email;
     }
 }

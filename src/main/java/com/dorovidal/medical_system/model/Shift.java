@@ -16,6 +16,8 @@ public class Shift {
 
     private LocalDateTime schedule;
 
+    private LocalDateTime createdAt;
+
     @ManyToOne(fetch = FetchType.EAGER)
     private Patient patient;
 

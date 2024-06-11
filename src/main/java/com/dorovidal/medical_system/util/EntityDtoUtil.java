@@ -37,4 +37,24 @@ public class EntityDtoUtil {
 
         return patient;
     }
+
+    public static Patient toEntity(PatientDto patientDto, User user) {
+        Patient patient = new Patient();
+        BeanUtils.copyProperties(patientDto, patient);
+        patient.setName(user.getName());
+        patient.setLastname(user.getLastname());
+        patient.setDateOfBirth(user.getDateOfBirth());
+
+        return patient;
+    }
+
+    public static void copyProperties(PatientDto patientDto, Patient patient) {
+        patient.setName(patientDto.getName());
+        patient.setLastname(patientDto.getLastname());
+        patient.setDateOfBirth(patientDto.getDateOfBirth());
+        patient.setAddress(patientDto.getAddress());
+        patient.setPhone(patientDto.getPhone());
+        patient.setGenre(patientDto.getGenre());
+        patient.setDni(patientDto.getDni());
+    }
 }

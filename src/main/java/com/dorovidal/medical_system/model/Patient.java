@@ -26,8 +26,6 @@ public class Patient {
 
     private Long phone;
 
-    private String email;
-
     private String genre;
 
     private Long dni;

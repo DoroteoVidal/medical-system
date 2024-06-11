@@ -16,12 +16,6 @@ public class Doctor {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String name;
-
-    private String lastname;
-
-    private LocalDate dateOfBirth;
-
     private String address;
 
     @OneToOne
@@ -30,8 +24,6 @@ public class Doctor {
     private String biography;
 
     private Long phone;
-
-    private String email;
 
     private String genre;
 

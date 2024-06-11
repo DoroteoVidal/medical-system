@@ -28,7 +28,7 @@ import java.util.Set;
 public class UserServiceImpl implements UserService {
 
     public static final int ALLOWED_AGE = 18;
-    public static final Long USER_ID = 4L;
+    public static final Long USER_ID = 2L;
 
     @Autowired
     private UserRepository userRepository;
@@ -65,11 +65,13 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public UserResponseDto update(Long userId, UserRequestDto userDto) throws UserNotFoundException, UserFoundException {
-        if(userRepository.findUserByEmailIgnoreCase(userDto.getEmail()).isPresent()) {
-            throw new UserFoundException();
+        User user = userRepository.findByIdAndIsActiveTrue(userId).orElseThrow(UserNotFoundException::new);
+        if(!user.getEmail().equals(userDto.getEmail())) {
+            if(userRepository.findUserByEmailIgnoreCase(userDto.getEmail()).isPresent()) {
+                throw new UserFoundException();
+            }
         }
 
-        User user = userRepository.findByIdAndIsActiveTrue(userId).orElseThrow(UserNotFoundException::new);
         BeanUtils.copyProperties(userDto, user);
         user.setPassword(passwordEncoder.encode(userDto.getPassword()));
         User savedUser = userRepository.save(user);
