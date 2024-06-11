@@ -28,6 +28,10 @@ public class Patient {
 
     private String email;
 
+    private String genre;
+
+    private Long dni;
+
     @ManyToOne
     private User user;
 

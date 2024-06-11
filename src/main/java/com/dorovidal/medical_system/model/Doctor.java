@@ -33,6 +33,10 @@ public class Doctor {
 
     private String email;
 
+    private String genre;
+
+    private Long dni;
+
     @OneToOne
     private User user;
 
