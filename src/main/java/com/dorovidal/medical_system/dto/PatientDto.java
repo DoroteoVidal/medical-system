@@ -15,6 +15,7 @@ public class PatientDto {
     private Long dni;
     private String email;
 
+    public PatientDto() {}
 
     public PatientDto(String name,
                       String lastname,
