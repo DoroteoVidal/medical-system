@@ -64,12 +64,16 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public UserResponseDto update(Long userId, UserRequestDto userDto) throws UserNotFoundException, UserFoundException {
+    public UserResponseDto update(Long userId, UserRequestDto userDto) throws UserNotFoundException, UserFoundException, UnderageUserException {
         User user = userRepository.findByIdAndIsActiveTrue(userId).orElseThrow(UserNotFoundException::new);
         if(!user.getEmail().equals(userDto.getEmail())) {
             if(userRepository.findUserByEmailIgnoreCase(userDto.getEmail()).isPresent()) {
                 throw new UserFoundException();
             }
+        }
+
+        if(Period.between(userDto.getDateOfBirth(), LocalDate.now()).getYears() < ALLOWED_AGE) {
+            throw new UnderageUserException();
         }
 
         BeanUtils.copyProperties(userDto, user);
