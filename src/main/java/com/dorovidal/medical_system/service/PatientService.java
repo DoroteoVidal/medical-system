@@ -5,14 +5,13 @@ import com.dorovidal.medical_system.dto.PatientUserDto;
 import com.dorovidal.medical_system.exception.UserFoundException;
 import com.dorovidal.medical_system.exception.UserNotFoundException;
 
-import java.security.Principal;
 import java.util.List;
 
 public interface PatientService {
 
-    PatientDto save(PatientDto patientDto, Principal principal) throws UserFoundException;
+    PatientDto save(PatientDto patientDto) throws UserFoundException;
 
-    PatientDto saveWithUser(PatientUserDto patientUserDto, Principal principal) throws UserFoundException;
+    PatientDto saveWithUser(PatientUserDto patientUserDto) throws UserFoundException;
 
     PatientDto update(Long patientId, PatientDto patientDto) throws UserNotFoundException, UserFoundException;
 

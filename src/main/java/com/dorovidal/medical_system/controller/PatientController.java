@@ -13,7 +13,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import java.security.Principal;
 import java.util.List;
 
 @RestController
@@ -25,9 +24,9 @@ public class PatientController {
 
     @PostMapping
     @PreAuthorize("hasAnyAuthority(\"" + AuthorityConstant.USER + "\")")
-    public ResponseEntity<?> save(@RequestBody @Valid PatientDto patientDto, Principal principal) {
+    public ResponseEntity<?> save(@RequestBody @Valid PatientDto patientDto) {
         try{
-            return ResponseEntity.status(HttpStatus.CREATED).body(patientService.save(patientDto, principal));
+            return ResponseEntity.status(HttpStatus.CREATED).body(patientService.save(patientDto));
         } catch (UserFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
@@ -35,9 +34,9 @@ public class PatientController {
 
     @PostMapping("save-me")
     @PreAuthorize("hasAnyAuthority(\"" + AuthorityConstant.USER + "\")")
-    public ResponseEntity<?> saveWithUser(@RequestBody @Valid PatientUserDto patientUserDtoDto, Principal principal) {
+    public ResponseEntity<?> saveWithUser(@RequestBody @Valid PatientUserDto patientUserDtoDto) {
         try{
-            return ResponseEntity.status(HttpStatus.CREATED).body(patientService.saveWithUser(patientUserDtoDto, principal));
+            return ResponseEntity.status(HttpStatus.CREATED).body(patientService.saveWithUser(patientUserDtoDto));
         } catch (UserFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }

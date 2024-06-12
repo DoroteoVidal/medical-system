@@ -8,14 +8,12 @@ import com.dorovidal.medical_system.model.Patient;
 import com.dorovidal.medical_system.model.User;
 import com.dorovidal.medical_system.repository.PatientRepository;
 import com.dorovidal.medical_system.security.DomainUserDetailsService;
+import com.dorovidal.medical_system.security.PrincipalProvider;
 import com.dorovidal.medical_system.service.PatientService;
 import com.dorovidal.medical_system.util.EntityDtoUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import java.security.Principal;
 import java.util.List;
 
 @Service
@@ -27,13 +25,22 @@ public class PatientServiceImpl implements PatientService {
     @Autowired
     private DomainUserDetailsService domainUserDetailsService;
 
-    @Override
-    public PatientDto save(PatientDto patientDto, Principal principal) throws UserFoundException {
-        User user = (User) domainUserDetailsService.loadUserByEmail(principal.getName());
+    @Autowired
+    private PrincipalProvider principalProvider;
 
-        if(patientRepository.findByDni(patientDto.getDni()).isPresent()) {
-            throw new UserFoundException("Patient with this dni or email already exists");
+    public User getUserByDni(Long dni) throws UserFoundException {
+        User user = (User) domainUserDetailsService.loadUserByEmail(principalProvider.getPrincipal().getName());
+
+        if(patientRepository.findByDni(dni).isPresent()) {
+            throw new UserFoundException("Patient with this dni already exists");
         }
+
+        return user;
+    }
+
+    @Override
+    public PatientDto save(PatientDto patientDto) throws UserFoundException {
+        User user = getUserByDni(patientDto.getDni());
 
         Patient patient = EntityDtoUtil.toEntity(patientDto);
         patient.setUser(user);
@@ -42,12 +49,8 @@ public class PatientServiceImpl implements PatientService {
     }
 
     @Override
-    public PatientDto saveWithUser(PatientUserDto patientUserDto, Principal principal) throws UserFoundException {
-        User user = (User) domainUserDetailsService.loadUserByEmail(principal.getName());
-
-        if(patientRepository.findByDni(patientUserDto.getDni()).isPresent()) {
-            throw new UserFoundException("Patient with this dni or email already exists");
-        }
+    public PatientDto saveWithUser(PatientUserDto patientUserDto) throws UserFoundException {
+        User user = getUserByDni(patientUserDto.getDni());
 
         Patient patient = EntityDtoUtil.toEntity(patientUserDto, user);
         patient.setUser(user);
