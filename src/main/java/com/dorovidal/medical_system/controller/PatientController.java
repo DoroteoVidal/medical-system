@@ -1,6 +1,7 @@
 package com.dorovidal.medical_system.controller;
 
 import com.dorovidal.medical_system.dto.PatientDto;
+import com.dorovidal.medical_system.dto.PatientUserDto;
 import com.dorovidal.medical_system.exception.UserFoundException;
 import com.dorovidal.medical_system.exception.UserNotFoundException;
 import com.dorovidal.medical_system.security.AuthorityConstant;
@@ -27,7 +28,17 @@ public class PatientController {
     public ResponseEntity<?> save(@RequestBody @Valid PatientDto patientDto, Principal principal) {
         try{
             return ResponseEntity.status(HttpStatus.CREATED).body(patientService.save(patientDto, principal));
-        } catch (UserFoundException | UserNotFoundException e) {
+        } catch (UserFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
+    }
+
+    @PostMapping("save-me")
+    @PreAuthorize("hasAnyAuthority(\"" + AuthorityConstant.USER + "\")")
+    public ResponseEntity<?> saveWithUser(@RequestBody @Valid PatientUserDto patientUserDtoDto, Principal principal) {
+        try{
+            return ResponseEntity.status(HttpStatus.CREATED).body(patientService.saveWithUser(patientUserDtoDto, principal));
+        } catch (UserFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }

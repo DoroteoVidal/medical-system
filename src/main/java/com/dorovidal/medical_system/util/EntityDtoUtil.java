@@ -1,6 +1,7 @@
 package com.dorovidal.medical_system.util;
 
 import com.dorovidal.medical_system.dto.PatientDto;
+import com.dorovidal.medical_system.dto.PatientUserDto;
 import com.dorovidal.medical_system.dto.UserRequestDto;
 import com.dorovidal.medical_system.dto.UserResponseDto;
 import com.dorovidal.medical_system.model.Patient;
@@ -38,9 +39,9 @@ public class EntityDtoUtil {
         return patient;
     }
 
-    public static Patient toEntity(PatientDto patientDto, User user) {
+    public static Patient toEntity(PatientUserDto patientUserDto, User user) {
         Patient patient = new Patient();
-        BeanUtils.copyProperties(patientDto, patient);
+        BeanUtils.copyProperties(patientUserDto, patient);
         patient.setName(user.getName());
         patient.setLastname(user.getLastname());
         patient.setDateOfBirth(user.getDateOfBirth());

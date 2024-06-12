@@ -10,8 +10,14 @@ import java.time.LocalDate;
 public class PatientDto {
 
     private Long id;
+
+    @NotBlank
     private String name;
+
+    @NotBlank
     private String lastname;
+
+    @NotNull
     private LocalDate dateOfBirth;
 
     @NotBlank
@@ -26,13 +32,6 @@ public class PatientDto {
     private Long dni;
 
     public PatientDto() {}
-
-    public PatientDto(String address, Long phone, String genre, Long dni) {
-        this.address = address;
-        this.phone = phone;
-        this.genre = genre;
-        this.dni = dni;
-    }
 
     public PatientDto(String name, String lastname, LocalDate dateOfBirth, String address, Long phone, String genre, Long dni) {
         this.name = name;
