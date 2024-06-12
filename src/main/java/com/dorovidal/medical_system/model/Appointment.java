@@ -7,8 +7,8 @@ import java.time.LocalDateTime;
 
 @Entity
 @Data
-@Table(name = "shifts")
-public class Shift {
+@Table(name = "appointments")
+public class Appointment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,8 +24,8 @@ public class Shift {
     @ManyToOne(fetch = FetchType.EAGER)
     private Doctor doctor;
 
-    private ShiftStatus status;
+    private AppointmentStatus status;
 
-    public Shift() {}
+    public Appointment() {}
 
 }

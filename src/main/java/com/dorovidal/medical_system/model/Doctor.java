@@ -33,7 +33,7 @@ public class Doctor {
     private User user;
 
     @OneToMany(mappedBy = "doctor", cascade = CascadeType.ALL)
-    private Set<Shift> shifts = new LinkedHashSet<>();
+    private Set<Appointment> appointments = new LinkedHashSet<>();
 
     @OneToMany(mappedBy = "doctor", cascade = CascadeType.ALL)
     private Set<MedicalSchedule> medicalSchedules = new LinkedHashSet<>();

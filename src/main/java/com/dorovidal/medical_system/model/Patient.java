@@ -37,7 +37,7 @@ public class Patient {
     private Set<MedicalHistory> medicalHistory = new LinkedHashSet<>();
 
     @OneToMany(mappedBy = "patient", cascade = CascadeType.ALL)
-    private Set<Shift> shifts = new LinkedHashSet<>();
+    private Set<Appointment> appointments = new LinkedHashSet<>();
 
     public Patient() {}
 

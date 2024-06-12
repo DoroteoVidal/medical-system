@@ -20,4 +20,6 @@ public interface PatientService {
     PatientDto getById(Long patientId) throws UserNotFoundException;
 
     List<PatientDto> getAll();
+
+
 }
