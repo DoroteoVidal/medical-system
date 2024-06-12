@@ -13,6 +13,7 @@ import com.dorovidal.medical_system.service.PatientService;
 import com.dorovidal.medical_system.util.EntityDtoUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -28,7 +29,7 @@ public class PatientServiceImpl implements PatientService {
     @Autowired
     private PrincipalProvider principalProvider;
 
-    public User getUserByDni(Long dni) throws UserFoundException {
+    private User getUserByDni(Long dni) throws UserFoundException {
         User user = (User) domainUserDetailsService.loadUserByEmail(principalProvider.getPrincipal().getName());
 
         if(patientRepository.findByDni(dni).isPresent()) {
@@ -39,6 +40,7 @@ public class PatientServiceImpl implements PatientService {
     }
 
     @Override
+    @Transactional
     public PatientDto save(PatientDto patientDto) throws UserFoundException {
         User user = getUserByDni(patientDto.getDni());
 
@@ -49,6 +51,7 @@ public class PatientServiceImpl implements PatientService {
     }
 
     @Override
+    @Transactional
     public PatientDto saveWithUser(PatientUserDto patientUserDto) throws UserFoundException {
         User user = getUserByDni(patientUserDto.getDni());
 
@@ -59,6 +62,7 @@ public class PatientServiceImpl implements PatientService {
     }
 
     @Override
+    @Transactional
     public PatientDto update(Long patientId, PatientDto patientDto) throws UserNotFoundException, UserFoundException {
         Patient patient = patientRepository.findById(patientId).orElseThrow(
                 () -> new UserNotFoundException("The patient does not exist"));
@@ -76,6 +80,7 @@ public class PatientServiceImpl implements PatientService {
     }
 
     @Override
+    @Transactional
     public void delete(Long patientId) throws UserNotFoundException {
         if(!patientRepository.existsById(patientId)) {
             throw new UserNotFoundException("The patient does not exist");
@@ -85,12 +90,14 @@ public class PatientServiceImpl implements PatientService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public PatientDto getById(Long patientId) throws UserNotFoundException {
         return EntityDtoUtil.toDto(patientRepository.findById(patientId).orElseThrow(
                 () -> new UserNotFoundException("The patient does not exist")));
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<PatientDto> getAll() {
         return patientRepository.findAll()
                 .stream()

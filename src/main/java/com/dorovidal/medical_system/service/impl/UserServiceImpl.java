@@ -102,6 +102,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public UserResponseDto getById(Long userId) throws UserNotFoundException {
         return EntityDtoUtil.toDto(userRepository.findById(userId).orElseThrow(UserNotFoundException::new));
     }
