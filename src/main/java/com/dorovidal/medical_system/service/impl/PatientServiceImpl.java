@@ -6,13 +6,13 @@ import com.dorovidal.medical_system.exception.UserFoundException;
 import com.dorovidal.medical_system.exception.UserNotFoundException;
 import com.dorovidal.medical_system.model.Patient;
 import com.dorovidal.medical_system.model.User;
-import com.dorovidal.medical_system.repository.DoctorRepository;
 import com.dorovidal.medical_system.repository.PatientRepository;
 import com.dorovidal.medical_system.security.DomainUserDetailsService;
 import com.dorovidal.medical_system.security.PrincipalProvider;
 import com.dorovidal.medical_system.service.PatientService;
 import com.dorovidal.medical_system.util.EntityDtoUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,18 +31,23 @@ public class PatientServiceImpl implements PatientService {
     private PrincipalProvider principalProvider;
 
     private User getUserByDni(Long dni) throws UserFoundException {
-        User user = (User) domainUserDetailsService.loadUserByEmail(principalProvider.getPrincipal().getName());
+        try {
+            User user = (User) domainUserDetailsService.loadUserByEmail(principalProvider.getPrincipal().getName());
 
-        if(patientRepository.findByDni(dni).isPresent()) {
-            throw new UserFoundException("Patient with this dni already exists");
+            if(patientRepository.findByDni(dni).isPresent()) {
+                throw new UserFoundException("Patient with this dni already exists");
+            }
+
+            return user;
+        } catch (UsernameNotFoundException e) {
+            throw new UsernameNotFoundException(e.getMessage());
         }
 
-        return user;
     }
 
     @Override
     @Transactional
-    public PatientDto save(PatientDto patientDto) throws UserFoundException {
+    public PatientDto save(PatientDto patientDto) throws UserFoundException, UsernameNotFoundException {
         User user = getUserByDni(patientDto.getDni());
 
         Patient patient = EntityDtoUtil.toEntity(patientDto);

@@ -1,5 +1,6 @@
 package com.dorovidal.medical_system.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
@@ -24,16 +25,16 @@ public class User implements UserDetails {
 
     private String password;
 
-    // para verificar que el usuario sea mayor de edad
     private LocalDate dateOfBirth;
 
     private String name;
 
     private String lastname;
 
-    private boolean isActive = true;
+    private boolean enabled = true;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "user")
+    @JsonIgnore
     private Set<UserRole> userRoles = new HashSet<>();
 
     public User() {}

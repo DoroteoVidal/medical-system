@@ -65,7 +65,7 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public UserResponseDto update(Long userId, UserRequestDto userDto) throws UserNotFoundException, UserFoundException, UnderageUserException {
-        User user = userRepository.findByIdAndIsActiveTrue(userId).orElseThrow(UserNotFoundException::new);
+        User user = userRepository.findByIdAndEnabledTrue(userId).orElseThrow(UserNotFoundException::new);
         if(!user.getEmail().equals(userDto.getEmail())) {
             if(userRepository.findUserByEmailIgnoreCase(userDto.getEmail()).isPresent()) {
                 throw new UserFoundException();
@@ -86,8 +86,8 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public void delete(Long userId) throws UserNotFoundException {
-        User user = userRepository.findByIdAndIsActiveTrue(userId).orElseThrow(UserNotFoundException::new);
-        user.setActive(false);
+        User user = userRepository.findByIdAndEnabledTrue(userId).orElseThrow(UserNotFoundException::new);
+        user.setEnabled(false);
         userRepository.save(user);
     }
 
@@ -95,7 +95,7 @@ public class UserServiceImpl implements UserService {
     @Transactional(readOnly = true)
     public List<UserResponseDto> getAll() {
         return userRepository
-                .findAllByIsActiveTrue()
+                .findAllByEnabledTrue()
                 .stream()
                 .map(EntityDtoUtil::toDto)
                 .toList();

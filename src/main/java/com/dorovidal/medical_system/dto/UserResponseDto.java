@@ -14,6 +14,6 @@ public class UserResponseDto {
     private LocalDate dateOfBirth;
     private String name;
     private String lastname;
-    private boolean isActive;
+    private boolean enabled;
     private String role;
 }

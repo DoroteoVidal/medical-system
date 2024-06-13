@@ -53,7 +53,7 @@ public class EntityDtoUtil {
         patient.setDateOfBirth(patientDto.getDateOfBirth());
         patient.setAddress(patientDto.getAddress());
         patient.setPhone(patientDto.getPhone());
-        patient.setGenre(patientDto.getGenre());
+        patient.setGender(patientDto.getGender());
         patient.setDni(patientDto.getDni());
     }
 

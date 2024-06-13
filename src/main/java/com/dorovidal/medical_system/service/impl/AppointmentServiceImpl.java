@@ -12,6 +12,7 @@ import com.dorovidal.medical_system.repository.PatientRepository;
 import com.dorovidal.medical_system.service.AppointmentService;
 import com.dorovidal.medical_system.util.EntityDtoUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 
 public class AppointmentServiceImpl implements AppointmentService {
 
@@ -25,6 +26,7 @@ public class AppointmentServiceImpl implements AppointmentService {
     private PatientRepository patientRepository;
 
     @Override
+    @Transactional
     public AppointmentResponseDto makeAnAppointment(AppointmentRequestDto requestDto) throws UserNotFoundException {
         Doctor doctor = doctorRepository
                 .findById(requestDto.getDoctorId())

@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -27,7 +28,7 @@ public class PatientController {
     public ResponseEntity<?> save(@RequestBody @Valid PatientDto patientDto) {
         try{
             return ResponseEntity.status(HttpStatus.CREATED).body(patientService.save(patientDto));
-        } catch (UserFoundException e) {
+        } catch (UserFoundException | UsernameNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }

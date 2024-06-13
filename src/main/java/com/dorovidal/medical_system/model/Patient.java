@@ -26,7 +26,8 @@ public class Patient {
 
     private Long phone;
 
-    private String genre;
+    @Column(length = 1)
+    private String gender;
 
     private Long dni;
 

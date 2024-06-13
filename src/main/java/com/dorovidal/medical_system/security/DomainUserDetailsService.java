@@ -22,7 +22,7 @@ public class DomainUserDetailsService implements UserDetailsService {
     private final UserRepository userRepository;
 
     public UserDetails loadUserByEmail(String email) throws UsernameNotFoundException {
-        return (UserDetails) userRepository.findUserByEmailIgnoreCase(email)
+        return userRepository.findUserByEmailIgnoreCaseAndEnabledTrue(email)
                 .orElseThrow(
                         () -> new UsernameNotFoundException("There is no user with email " + email)
                 );
@@ -31,7 +31,7 @@ public class DomainUserDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         return userRepository
-                .findUserByEmailIgnoreCase(email)
+                .findUserByEmailIgnoreCaseAndEnabledTrue(email)
                 .map(this::createSpringSecurityUser)
                 .orElseThrow(
                         () -> new UsernameNotFoundException("There is no user with email " + email)

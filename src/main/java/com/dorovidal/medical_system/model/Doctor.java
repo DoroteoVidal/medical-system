@@ -3,7 +3,6 @@ package com.dorovidal.medical_system.model;
 import jakarta.persistence.*;
 import lombok.Data;
 
-import java.time.LocalDate;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -25,7 +24,8 @@ public class Doctor {
 
     private Long phone;
 
-    private String genre;
+    @Column(length = 1)
+    private String gender;
 
     private Long dni;
 
