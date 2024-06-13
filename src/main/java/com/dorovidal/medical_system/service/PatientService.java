@@ -1,5 +1,7 @@
 package com.dorovidal.medical_system.service;
 
+import com.dorovidal.medical_system.dto.AppointmentRequestDto;
+import com.dorovidal.medical_system.dto.AppointmentResponseDto;
 import com.dorovidal.medical_system.dto.PatientDto;
 import com.dorovidal.medical_system.dto.PatientUserDto;
 import com.dorovidal.medical_system.exception.UserFoundException;
@@ -20,6 +22,5 @@ public interface PatientService {
     PatientDto getById(Long patientId) throws UserNotFoundException;
 
     List<PatientDto> getAll();
-
 
 }

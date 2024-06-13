@@ -1,12 +1,10 @@
 package com.dorovidal.medical_system.util;
 
-import com.dorovidal.medical_system.dto.PatientDto;
-import com.dorovidal.medical_system.dto.PatientUserDto;
-import com.dorovidal.medical_system.dto.UserRequestDto;
-import com.dorovidal.medical_system.dto.UserResponseDto;
-import com.dorovidal.medical_system.model.Patient;
-import com.dorovidal.medical_system.model.User;
+import com.dorovidal.medical_system.dto.*;
+import com.dorovidal.medical_system.model.*;
 import org.springframework.beans.BeanUtils;
+
+import java.time.LocalDateTime;
 
 public class EntityDtoUtil {
 
@@ -57,5 +55,22 @@ public class EntityDtoUtil {
         patient.setPhone(patientDto.getPhone());
         patient.setGenre(patientDto.getGenre());
         patient.setDni(patientDto.getDni());
+    }
+
+    public static Appointment createEntity(Doctor doctor, Patient patient) {
+        Appointment appointment = new Appointment();
+        appointment.setPatient(patient);
+        appointment.setDoctor(doctor);
+        appointment.setCreatedAt(LocalDateTime.now());
+        appointment.setStatus(AppointmentStatus.RESERVED);
+
+        return appointment;
+    }
+
+    public static AppointmentResponseDto toDto(Appointment appointment) {
+        AppointmentResponseDto appointmentResponseDto = new AppointmentResponseDto();
+        BeanUtils.copyProperties(appointment, appointmentResponseDto);
+
+        return appointmentResponseDto;
     }
 }

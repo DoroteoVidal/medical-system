@@ -6,7 +6,7 @@ import lombok.Getter;
 import java.time.LocalDateTime;
 
 @Getter
-public class ShiftRequestDto {
+public class AppointmentRequestDto {
 
     @NotNull
     private LocalDateTime schedule;
@@ -17,9 +17,9 @@ public class ShiftRequestDto {
     @NotNull
     private Long doctorId;
 
-    public ShiftRequestDto() {}
+    public AppointmentRequestDto() {}
 
-    public ShiftRequestDto(LocalDateTime schedule, Long patientId, Long doctorId) {
+    public AppointmentRequestDto(LocalDateTime schedule, Long patientId, Long doctorId) {
         this.schedule = schedule;
         this.patientId = patientId;
         this.doctorId = doctorId;

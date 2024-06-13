@@ -6,6 +6,7 @@ import com.dorovidal.medical_system.exception.UserFoundException;
 import com.dorovidal.medical_system.exception.UserNotFoundException;
 import com.dorovidal.medical_system.model.Patient;
 import com.dorovidal.medical_system.model.User;
+import com.dorovidal.medical_system.repository.DoctorRepository;
 import com.dorovidal.medical_system.repository.PatientRepository;
 import com.dorovidal.medical_system.security.DomainUserDetailsService;
 import com.dorovidal.medical_system.security.PrincipalProvider;
