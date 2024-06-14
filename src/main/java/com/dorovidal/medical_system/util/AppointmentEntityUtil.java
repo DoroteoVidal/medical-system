@@ -24,4 +24,11 @@ public class AppointmentEntityUtil {
 
         return appointmentResponseDto;
     }
+
+    public static void copyProperties(Doctor doctor, Patient patient, AppointmentRequestDto appointmentDto, Appointment appointment) {
+        appointment.setPatient(patient);
+        appointment.setDoctor(doctor);
+        appointment.setSchedule(appointmentDto.getSchedule());
+        appointment.setUpdatedAt(LocalDateTime.now());
+    }
 }

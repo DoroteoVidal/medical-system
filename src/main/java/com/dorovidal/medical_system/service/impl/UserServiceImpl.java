@@ -79,9 +79,9 @@ public class UserServiceImpl implements UserService {
 
         BeanUtils.copyProperties(userDto, user);
         user.setPassword(passwordEncoder.encode(userDto.getPassword()));
-        User savedUser = userRepository.save(user);
+        User updatedUser = userRepository.save(user);
 
-        return UserEntityUtil.toDto(savedUser);
+        return UserEntityUtil.toDto(updatedUser);
     }
 
     @Override

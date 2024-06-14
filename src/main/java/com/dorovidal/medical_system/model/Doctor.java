@@ -1,5 +1,6 @@
 package com.dorovidal.medical_system.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -33,9 +34,11 @@ public class Doctor {
     private User user;
 
     @OneToMany(mappedBy = "doctor", cascade = CascadeType.ALL)
+    @JsonIgnore
     private Set<Appointment> appointments = new LinkedHashSet<>();
 
     @OneToMany(mappedBy = "doctor", cascade = CascadeType.ALL)
+    @JsonIgnore
     private Set<MedicalSchedule> medicalSchedules = new LinkedHashSet<>();
 
     public Doctor() {}

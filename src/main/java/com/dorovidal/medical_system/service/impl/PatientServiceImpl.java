@@ -74,9 +74,9 @@ public class PatientServiceImpl implements PatientService {
         }
 
         PatientEntityUtil.copyProperties(patientDto, patient);
-        Patient patientSaved = patientRepository.save(patient);
+        Patient updatedPatient = patientRepository.save(patient);
 
-        return PatientEntityUtil.toDto(patientSaved);
+        return PatientEntityUtil.toDto(updatedPatient);
     }
 
     @Override

@@ -15,5 +15,6 @@ public class AppointmentResponseDto {
     private Patient patient;
     private LocalDateTime schedule;
     private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
     private AppointmentStatus status;
 }

@@ -2,7 +2,6 @@ package com.dorovidal.medical_system.controller;
 
 import com.dorovidal.medical_system.dto.UserRequestDto;
 import com.dorovidal.medical_system.dto.UserResponseDto;
-import com.dorovidal.medical_system.exception.UserNotFoundException;
 import com.dorovidal.medical_system.security.AuthorityConstant;
 import com.dorovidal.medical_system.service.UserService;
 import jakarta.validation.Valid;
