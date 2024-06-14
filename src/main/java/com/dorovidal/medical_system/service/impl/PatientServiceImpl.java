@@ -12,6 +12,7 @@ import com.dorovidal.medical_system.security.PrincipalProvider;
 import com.dorovidal.medical_system.service.PatientService;
 import com.dorovidal.medical_system.service.UserService;
 import com.dorovidal.medical_system.util.PatientEntityUtil;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -73,7 +74,7 @@ public class PatientServiceImpl implements PatientService {
             }
         }
 
-        PatientEntityUtil.copyProperties(patientDto, patient);
+        BeanUtils.copyProperties(patientDto, patient);
         Patient updatedPatient = patientRepository.save(patient);
 
         return PatientEntityUtil.toDto(updatedPatient);

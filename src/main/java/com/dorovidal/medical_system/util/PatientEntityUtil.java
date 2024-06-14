@@ -33,13 +33,4 @@ public class PatientEntityUtil {
         return patient;
     }
 
-    public static void copyProperties(PatientRequestDto patientDto, Patient patient) {
-        patient.setName(patientDto.getName());
-        patient.setLastname(patientDto.getLastname());
-        patient.setDateOfBirth(patientDto.getDateOfBirth());
-        patient.setAddress(patientDto.getAddress());
-        patient.setPhone(patientDto.getPhone());
-        patient.setGender(patientDto.getGender());
-        patient.setDni(patientDto.getDni());
-    }
 }
