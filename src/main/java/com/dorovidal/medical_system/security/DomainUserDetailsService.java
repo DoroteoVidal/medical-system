@@ -21,13 +21,6 @@ public class DomainUserDetailsService implements UserDetailsService {
 
     private final UserRepository userRepository;
 
-    public UserDetails loadUserByEmail(String email) throws UsernameNotFoundException {
-        return userRepository.findUserByEmailIgnoreCaseAndEnabledTrue(email)
-                .orElseThrow(
-                        () -> new UsernameNotFoundException("There is no user with email " + email)
-                );
-    }
-
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         return userRepository

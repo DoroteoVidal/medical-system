@@ -4,13 +4,12 @@ import com.dorovidal.medical_system.dto.PatientDto;
 import com.dorovidal.medical_system.dto.PatientUserDto;
 import com.dorovidal.medical_system.exception.UserFoundException;
 import com.dorovidal.medical_system.exception.UserNotFoundException;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import java.util.List;
 
 public interface PatientService {
 
-    PatientDto save(PatientDto patientDto) throws UserFoundException, UsernameNotFoundException;
+    PatientDto save(PatientDto patientDto) throws UserFoundException;
 
     PatientDto saveWithUser(PatientUserDto patientUserDto) throws UserFoundException;
 

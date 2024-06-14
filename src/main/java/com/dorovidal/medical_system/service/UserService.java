@@ -5,6 +5,8 @@ import com.dorovidal.medical_system.dto.UserResponseDto;
 import com.dorovidal.medical_system.exception.UnderageUserException;
 import com.dorovidal.medical_system.exception.UserFoundException;
 import com.dorovidal.medical_system.exception.UserNotFoundException;
+import com.dorovidal.medical_system.model.User;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import java.util.List;
 
@@ -19,4 +21,6 @@ public interface UserService {
     List<UserResponseDto> getAll();
 
     UserResponseDto getById(Long userId) throws UserNotFoundException;
+
+    User loadUserByEmail(String email) throws UsernameNotFoundException;
 }

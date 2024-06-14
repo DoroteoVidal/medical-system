@@ -14,6 +14,8 @@ import com.dorovidal.medical_system.service.UserService;
 import com.dorovidal.medical_system.util.EntityDtoUtil;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -105,5 +107,14 @@ public class UserServiceImpl implements UserService {
     @Transactional(readOnly = true)
     public UserResponseDto getById(Long userId) throws UserNotFoundException {
         return EntityDtoUtil.toDto(userRepository.findById(userId).orElseThrow(UserNotFoundException::new));
+    }
+
+    @Override
+    @Transactional
+    public User loadUserByEmail(String email) throws UsernameNotFoundException {
+        return userRepository.findUserByEmailIgnoreCaseAndEnabledTrue(email)
+                .orElseThrow(
+                        () -> new UsernameNotFoundException("There is no user with email " + email)
+                );
     }
 }

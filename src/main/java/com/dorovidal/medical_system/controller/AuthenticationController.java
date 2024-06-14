@@ -37,12 +37,9 @@ public class AuthenticationController {
     @Autowired
     private UserService userService;
 
-    @Autowired
-    private DomainUserDetailsService domainUserDetailsService;
-
     @GetMapping("actual-user")
     public UserResponseDto getActualUser(Principal principal) {
-        return EntityDtoUtil.toDto((User) domainUserDetailsService.loadUserByEmail(principal.getName()));
+        return EntityDtoUtil.toDto(userService.loadUserByEmail(principal.getName()));
     }
 
     @PostMapping("sign-in")

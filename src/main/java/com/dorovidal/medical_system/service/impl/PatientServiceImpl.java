@@ -10,6 +10,7 @@ import com.dorovidal.medical_system.repository.PatientRepository;
 import com.dorovidal.medical_system.security.DomainUserDetailsService;
 import com.dorovidal.medical_system.security.PrincipalProvider;
 import com.dorovidal.medical_system.service.PatientService;
+import com.dorovidal.medical_system.service.UserService;
 import com.dorovidal.medical_system.util.EntityDtoUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -25,29 +26,23 @@ public class PatientServiceImpl implements PatientService {
     private PatientRepository patientRepository;
 
     @Autowired
-    private DomainUserDetailsService domainUserDetailsService;
+    private UserService userService;
 
     @Autowired
     private PrincipalProvider principalProvider;
 
     private User getUserByDni(Long dni) throws UserFoundException {
-        try {
-            User user = (User) domainUserDetailsService.loadUserByEmail(principalProvider.getPrincipal().getName());
-
-            if(patientRepository.findByDni(dni).isPresent()) {
-                throw new UserFoundException("Patient with this dni already exists");
-            }
-
-            return user;
-        } catch (UsernameNotFoundException e) {
-            throw new UsernameNotFoundException(e.getMessage());
+        User user = userService.loadUserByEmail(principalProvider.getPrincipal().getName());
+        if(patientRepository.findByDni(dni).isPresent()) {
+            throw new UserFoundException("Patient with this dni already exists");
         }
 
+        return user;
     }
 
     @Override
     @Transactional
-    public PatientDto save(PatientDto patientDto) throws UserFoundException, UsernameNotFoundException {
+    public PatientDto save(PatientDto patientDto) throws UserFoundException {
         User user = getUserByDni(patientDto.getDni());
 
         Patient patient = EntityDtoUtil.toEntity(patientDto);
