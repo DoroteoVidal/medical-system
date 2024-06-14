@@ -2,8 +2,6 @@ package com.dorovidal.medical_system.controller;
 
 import com.dorovidal.medical_system.dto.UserRequestDto;
 import com.dorovidal.medical_system.dto.UserResponseDto;
-import com.dorovidal.medical_system.exception.UnderageUserException;
-import com.dorovidal.medical_system.exception.UserFoundException;
 import com.dorovidal.medical_system.exception.UserNotFoundException;
 import com.dorovidal.medical_system.security.AuthorityConstant;
 import com.dorovidal.medical_system.service.UserService;
@@ -27,7 +25,7 @@ public class UserController {
     public ResponseEntity<?> getById(@PathVariable Long id) {
         try{
             return ResponseEntity.status(HttpStatus.OK).body(userService.getById(id));
-        } catch (UserNotFoundException e) {
+        } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }
@@ -42,7 +40,7 @@ public class UserController {
     public ResponseEntity<?> update(@PathVariable Long id, @RequestBody @Valid UserRequestDto userDto) {
         try{
             return ResponseEntity.status(HttpStatus.CREATED).body(userService.update(id, userDto));
-        } catch (UserNotFoundException | UserFoundException | UnderageUserException e) {
+        } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }
@@ -52,7 +50,7 @@ public class UserController {
         try{
             userService.delete(id);
             return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-        } catch (UserNotFoundException e) {
+        } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }

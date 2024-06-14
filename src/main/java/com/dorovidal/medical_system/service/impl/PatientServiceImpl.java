@@ -1,6 +1,7 @@
 package com.dorovidal.medical_system.service.impl;
 
-import com.dorovidal.medical_system.dto.PatientDto;
+import com.dorovidal.medical_system.dto.PatientRequestDto;
+import com.dorovidal.medical_system.dto.PatientResponseDto;
 import com.dorovidal.medical_system.dto.PatientUserDto;
 import com.dorovidal.medical_system.exception.UserFoundException;
 import com.dorovidal.medical_system.exception.UserNotFoundException;
@@ -40,7 +41,7 @@ public class PatientServiceImpl implements PatientService {
 
     @Override
     @Transactional
-    public PatientDto save(PatientDto patientDto) throws UserFoundException {
+    public PatientResponseDto save(PatientRequestDto patientDto) throws UserFoundException {
         User user = getUserByDni(patientDto.getDni());
 
         Patient patient = PatientEntityUtil.toEntity(patientDto);
@@ -51,7 +52,7 @@ public class PatientServiceImpl implements PatientService {
 
     @Override
     @Transactional
-    public PatientDto saveWithUser(PatientUserDto patientUserDto) throws UserFoundException {
+    public PatientResponseDto saveWithUser(PatientUserDto patientUserDto) throws UserFoundException {
         User user = getUserByDni(patientUserDto.getDni());
 
         Patient patient = PatientEntityUtil.toEntityWithUser(patientUserDto, user);
@@ -62,7 +63,7 @@ public class PatientServiceImpl implements PatientService {
 
     @Override
     @Transactional
-    public PatientDto update(Long patientId, PatientDto patientDto) throws UserNotFoundException, UserFoundException {
+    public PatientResponseDto update(Long patientId, PatientRequestDto patientDto) throws UserNotFoundException, UserFoundException {
         Patient patient = patientRepository.findById(patientId).orElseThrow(
                 () -> new UserNotFoundException("The patient does not exist"));
 
@@ -90,14 +91,14 @@ public class PatientServiceImpl implements PatientService {
 
     @Override
     @Transactional(readOnly = true)
-    public PatientDto getById(Long patientId) throws UserNotFoundException {
+    public PatientResponseDto getById(Long patientId) throws UserNotFoundException {
         return PatientEntityUtil.toDto(patientRepository.findById(patientId).orElseThrow(
                 () -> new UserNotFoundException("The patient does not exist")));
     }
 
     @Override
     @Transactional(readOnly = true)
-    public List<PatientDto> getAll() {
+    public List<PatientResponseDto> getAll() {
         return patientRepository.findAll()
                 .stream()
                 .map(PatientEntityUtil::toDto)

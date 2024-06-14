@@ -4,12 +4,9 @@ import com.dorovidal.medical_system.dto.AuthDto;
 import com.dorovidal.medical_system.dto.JwtTokenDto;
 import com.dorovidal.medical_system.dto.UserRequestDto;
 import com.dorovidal.medical_system.dto.UserResponseDto;
-import com.dorovidal.medical_system.exception.UnderageUserException;
-import com.dorovidal.medical_system.exception.UserFoundException;
 import com.dorovidal.medical_system.security.JwtFilter;
 import com.dorovidal.medical_system.security.TokenProvider;
 import com.dorovidal.medical_system.service.UserService;
-import com.dorovidal.medical_system.util.AppointmentEntityUtil;
 import com.dorovidal.medical_system.util.UserEntityUtil;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,7 +42,7 @@ public class AuthenticationController {
     public ResponseEntity<?> signIn(@RequestBody @Valid UserRequestDto userDto) {
         try {
             return ResponseEntity.status(HttpStatus.CREATED).body(userService.save(userDto));
-        } catch (UserFoundException | IllegalArgumentException | UnderageUserException e) {
+        } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }

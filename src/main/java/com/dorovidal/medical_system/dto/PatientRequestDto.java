@@ -4,14 +4,12 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
-import lombok.Data;
+import lombok.Getter;
 
 import java.time.LocalDate;
 
-@Data
-public class PatientDto {
-
-    private Long id;
+@Getter
+public class PatientRequestDto {
 
     @NotBlank
     private String name;
@@ -35,9 +33,9 @@ public class PatientDto {
     @NotNull
     private Long dni;
 
-    public PatientDto() {}
+    public PatientRequestDto() {}
 
-    public PatientDto(String name, String lastname, LocalDate dateOfBirth, String address, Long phone, String gender, Long dni) {
+    public PatientRequestDto(String name, String lastname, LocalDate dateOfBirth, String address, Long phone, String gender, Long dni) {
         this.name = name;
         this.lastname = lastname;
         this.dateOfBirth = dateOfBirth;

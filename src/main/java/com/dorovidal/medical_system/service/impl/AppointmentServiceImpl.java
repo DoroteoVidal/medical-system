@@ -14,6 +14,8 @@ import com.dorovidal.medical_system.util.AppointmentEntityUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 public class AppointmentServiceImpl implements AppointmentService {
 
     @Autowired
@@ -27,17 +29,37 @@ public class AppointmentServiceImpl implements AppointmentService {
 
     @Override
     @Transactional
-    public AppointmentResponseDto makeAnAppointment(AppointmentRequestDto requestDto) throws UserNotFoundException {
+    public AppointmentResponseDto save(AppointmentRequestDto appointmentDto) throws UserNotFoundException {
         Doctor doctor = doctorRepository
-                .findById(requestDto.getDoctorId())
+                .findById(appointmentDto.getDoctorId())
                 .orElseThrow(() -> new UserNotFoundException("The doctor does not exist"));
         Patient patient = patientRepository
-                .findById(requestDto.getPatientId())
+                .findById(appointmentDto.getPatientId())
                 .orElseThrow(() -> new UserNotFoundException("The patient does not exist"));
 
         Appointment appointment = AppointmentEntityUtil.createEntity(doctor, patient);
         Appointment appointmentSaved = appointmentRepository.save(appointment);
 
         return AppointmentEntityUtil.toDto(appointmentSaved);
+    }
+
+    @Override
+    public AppointmentResponseDto update(Long appointmentId, AppointmentRequestDto appointmentDto) throws Exception {
+        return null;
+    }
+
+    @Override
+    public void delete(Long appointmentId) throws Exception {
+
+    }
+
+    @Override
+    public AppointmentResponseDto getById(Long appointmentId) throws Exception {
+        return null;
+    }
+
+    @Override
+    public List<AppointmentResponseDto> getAll() {
+        return List.of();
     }
 }
