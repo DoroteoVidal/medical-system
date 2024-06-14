@@ -18,8 +18,7 @@ public class Doctor {
 
     private String address;
 
-    @OneToOne
-    private Specialty specialty;
+    private String specialty;
 
     private String biography;
 

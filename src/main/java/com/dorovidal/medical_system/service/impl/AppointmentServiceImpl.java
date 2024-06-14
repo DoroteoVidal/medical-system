@@ -14,11 +14,13 @@ import com.dorovidal.medical_system.repository.PatientRepository;
 import com.dorovidal.medical_system.service.AppointmentService;
 import com.dorovidal.medical_system.util.AppointmentEntityUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
 
+@Service
 public class AppointmentServiceImpl implements AppointmentService {
 
     @Autowired
@@ -33,8 +35,10 @@ public class AppointmentServiceImpl implements AppointmentService {
     @Override
     @Transactional
     public AppointmentResponseDto save(AppointmentRequestDto appointmentDto) throws UserNotFoundException {
+        // Chequear que el turno este disponible para la fecha. Para eso se debera chequear la agenda del
+        // doctor y sus horarios.
         Doctor doctor = doctorRepository
-                .findById(appointmentDto.getDoctorId())
+                .findByIdAndUserIsEnabled(appointmentDto.getDoctorId())
                 .orElseThrow(() -> new UserNotFoundException("The doctor does not exist"));
         Patient patient = patientRepository
                 .findById(appointmentDto.getPatientId())
@@ -51,6 +55,8 @@ public class AppointmentServiceImpl implements AppointmentService {
     public AppointmentResponseDto update(Long appointmentId, AppointmentRequestDto appointmentDto) throws AppointmentNotFoundException, UserNotFoundException {
         // La actualizacion de un turno debe ser minimo un dia de antelacion y la fecha nueva debe
         // ser un dia despues de la pactada.
+        // Tambien se debe chequear que el doctor tenga turnos libres el dia y horario que
+        // se quiere modificar.
         Appointment appointment = appointmentRepository.findById(appointmentId)
                 .orElseThrow(AppointmentNotFoundException::new);
 
@@ -60,7 +66,7 @@ public class AppointmentServiceImpl implements AppointmentService {
         }
 
         Doctor doctor = doctorRepository
-                .findById(appointmentDto.getDoctorId())
+                .findByIdAndUserIsEnabled(appointmentDto.getDoctorId())
                 .orElseThrow(() -> new UserNotFoundException("The doctor does not exist"));
         Patient patient = patientRepository
                 .findById(appointmentDto.getPatientId())
