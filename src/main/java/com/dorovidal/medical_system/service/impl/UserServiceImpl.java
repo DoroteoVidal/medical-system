@@ -11,10 +11,9 @@ import com.dorovidal.medical_system.model.UserRole;
 import com.dorovidal.medical_system.repository.RoleRepository;
 import com.dorovidal.medical_system.repository.UserRepository;
 import com.dorovidal.medical_system.service.UserService;
-import com.dorovidal.medical_system.util.EntityDtoUtil;
+import com.dorovidal.medical_system.util.UserEntityUtil;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -52,7 +51,7 @@ public class UserServiceImpl implements UserService {
             throw new UnderageUserException();
         }
 
-        User user = EntityDtoUtil.toEntity(userDto);
+        User user = UserEntityUtil.toEntity(userDto);
         Role role = roleRepository.findById(USER_ID).orElseThrow(() -> new IllegalArgumentException("Role not found"));
         Set<UserRole> roles = new HashSet<>();
         UserRole userRole = new UserRole(user, role);
@@ -61,7 +60,7 @@ public class UserServiceImpl implements UserService {
         user.setPassword(passwordEncoder.encode(userDto.getPassword()));
         User savedUser = userRepository.save(user);
 
-        return EntityDtoUtil.toDto(savedUser);
+        return UserEntityUtil.toDto(savedUser);
     }
 
     @Override
@@ -82,7 +81,7 @@ public class UserServiceImpl implements UserService {
         user.setPassword(passwordEncoder.encode(userDto.getPassword()));
         User savedUser = userRepository.save(user);
 
-        return EntityDtoUtil.toDto(savedUser);
+        return UserEntityUtil.toDto(savedUser);
     }
 
     @Override
@@ -99,18 +98,18 @@ public class UserServiceImpl implements UserService {
         return userRepository
                 .findAllByEnabledTrue()
                 .stream()
-                .map(EntityDtoUtil::toDto)
+                .map(UserEntityUtil::toDto)
                 .toList();
     }
 
     @Override
     @Transactional(readOnly = true)
     public UserResponseDto getById(Long userId) throws UserNotFoundException {
-        return EntityDtoUtil.toDto(userRepository.findById(userId).orElseThrow(UserNotFoundException::new));
+        return UserEntityUtil.toDto(userRepository.findById(userId).orElseThrow(UserNotFoundException::new));
     }
 
     @Override
-    @Transactional
+    @Transactional(readOnly = true)
     public User loadUserByEmail(String email) throws UsernameNotFoundException {
         return userRepository.findUserByEmailIgnoreCaseAndEnabledTrue(email)
                 .orElseThrow(

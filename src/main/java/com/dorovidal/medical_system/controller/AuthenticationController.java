@@ -6,12 +6,11 @@ import com.dorovidal.medical_system.dto.UserRequestDto;
 import com.dorovidal.medical_system.dto.UserResponseDto;
 import com.dorovidal.medical_system.exception.UnderageUserException;
 import com.dorovidal.medical_system.exception.UserFoundException;
-import com.dorovidal.medical_system.model.User;
-import com.dorovidal.medical_system.security.DomainUserDetailsService;
 import com.dorovidal.medical_system.security.JwtFilter;
 import com.dorovidal.medical_system.security.TokenProvider;
 import com.dorovidal.medical_system.service.UserService;
-import com.dorovidal.medical_system.util.EntityDtoUtil;
+import com.dorovidal.medical_system.util.AppointmentEntityUtil;
+import com.dorovidal.medical_system.util.UserEntityUtil;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -39,7 +38,7 @@ public class AuthenticationController {
 
     @GetMapping("actual-user")
     public UserResponseDto getActualUser(Principal principal) {
-        return EntityDtoUtil.toDto(userService.loadUserByEmail(principal.getName()));
+        return UserEntityUtil.toDto(userService.loadUserByEmail(principal.getName()));
     }
 
     @PostMapping("sign-in")

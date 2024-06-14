@@ -7,13 +7,11 @@ import com.dorovidal.medical_system.exception.UserNotFoundException;
 import com.dorovidal.medical_system.model.Patient;
 import com.dorovidal.medical_system.model.User;
 import com.dorovidal.medical_system.repository.PatientRepository;
-import com.dorovidal.medical_system.security.DomainUserDetailsService;
 import com.dorovidal.medical_system.security.PrincipalProvider;
 import com.dorovidal.medical_system.service.PatientService;
 import com.dorovidal.medical_system.service.UserService;
-import com.dorovidal.medical_system.util.EntityDtoUtil;
+import com.dorovidal.medical_system.util.PatientEntityUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -45,10 +43,10 @@ public class PatientServiceImpl implements PatientService {
     public PatientDto save(PatientDto patientDto) throws UserFoundException {
         User user = getUserByDni(patientDto.getDni());
 
-        Patient patient = EntityDtoUtil.toEntity(patientDto);
+        Patient patient = PatientEntityUtil.toEntity(patientDto);
         patient.setUser(user);
 
-        return EntityDtoUtil.toDto(patientRepository.save(patient));
+        return PatientEntityUtil.toDto(patientRepository.save(patient));
     }
 
     @Override
@@ -56,10 +54,10 @@ public class PatientServiceImpl implements PatientService {
     public PatientDto saveWithUser(PatientUserDto patientUserDto) throws UserFoundException {
         User user = getUserByDni(patientUserDto.getDni());
 
-        Patient patient = EntityDtoUtil.toEntity(patientUserDto, user);
+        Patient patient = PatientEntityUtil.toEntityWithUser(patientUserDto, user);
         patient.setUser(user);
 
-        return EntityDtoUtil.toDto(patientRepository.save(patient));
+        return PatientEntityUtil.toDto(patientRepository.save(patient));
     }
 
     @Override
@@ -74,10 +72,10 @@ public class PatientServiceImpl implements PatientService {
             }
         }
 
-        EntityDtoUtil.copyProperties(patientDto, patient);
+        PatientEntityUtil.copyProperties(patientDto, patient);
         Patient patientSaved = patientRepository.save(patient);
 
-        return EntityDtoUtil.toDto(patientSaved);
+        return PatientEntityUtil.toDto(patientSaved);
     }
 
     @Override
@@ -93,7 +91,7 @@ public class PatientServiceImpl implements PatientService {
     @Override
     @Transactional(readOnly = true)
     public PatientDto getById(Long patientId) throws UserNotFoundException {
-        return EntityDtoUtil.toDto(patientRepository.findById(patientId).orElseThrow(
+        return PatientEntityUtil.toDto(patientRepository.findById(patientId).orElseThrow(
                 () -> new UserNotFoundException("The patient does not exist")));
     }
 
@@ -102,7 +100,7 @@ public class PatientServiceImpl implements PatientService {
     public List<PatientDto> getAll() {
         return patientRepository.findAll()
                 .stream()
-                .map(EntityDtoUtil::toDto)
+                .map(PatientEntityUtil::toDto)
                 .toList();
     }
 

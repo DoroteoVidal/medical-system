@@ -10,7 +10,7 @@ import com.dorovidal.medical_system.repository.AppointmentRepository;
 import com.dorovidal.medical_system.repository.DoctorRepository;
 import com.dorovidal.medical_system.repository.PatientRepository;
 import com.dorovidal.medical_system.service.AppointmentService;
-import com.dorovidal.medical_system.util.EntityDtoUtil;
+import com.dorovidal.medical_system.util.AppointmentEntityUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -35,9 +35,9 @@ public class AppointmentServiceImpl implements AppointmentService {
                 .findById(requestDto.getPatientId())
                 .orElseThrow(() -> new UserNotFoundException("The patient does not exist"));
 
-        Appointment appointment = EntityDtoUtil.createEntity(doctor, patient);
+        Appointment appointment = AppointmentEntityUtil.createEntity(doctor, patient);
         Appointment appointmentSaved = appointmentRepository.save(appointment);
 
-        return EntityDtoUtil.toDto(appointmentSaved);
+        return AppointmentEntityUtil.toDto(appointmentSaved);
     }
 }
