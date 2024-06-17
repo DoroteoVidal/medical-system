@@ -18,11 +18,13 @@ public class MedicalSchedule {
     @ManyToOne(fetch = FetchType.EAGER)
     private Doctor doctor;
 
-    private LocalDate date;
+    private LocalDate dateOfAppointment;
 
-    private LocalTime startOfShift;
+    private LocalTime startOfAppointment;
 
-    private LocalTime endOfShift;
+    private LocalTime endOfAppointment;
+
+    private AppointmentStatus status;
 
     public MedicalSchedule() {}
 

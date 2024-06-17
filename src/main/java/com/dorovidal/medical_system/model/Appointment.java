@@ -3,7 +3,9 @@ package com.dorovidal.medical_system.model;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 @Entity
 @Data
@@ -14,7 +16,9 @@ public class Appointment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private LocalDateTime schedule;
+    private LocalDate dateOfAppointment;
+
+    private LocalTime appointmentSchedule;
 
     private LocalDateTime createdAt;
 
@@ -23,8 +27,8 @@ public class Appointment {
     @ManyToOne(fetch = FetchType.EAGER)
     private Patient patient;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    private Doctor doctor;
+    @OneToOne
+    private MedicalSchedule medicalSchedule;
 
     private AppointmentStatus status;
 

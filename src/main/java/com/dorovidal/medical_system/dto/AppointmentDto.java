@@ -6,15 +6,17 @@ import com.dorovidal.medical_system.model.Patient;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 @Data
 @RequiredArgsConstructor
-public class AppointmentResponseDto {
+public class AppointmentDto {
     private Doctor doctor;
     private Patient patient;
-    private LocalDateTime schedule;
+    private LocalDate dateOfAppointment;
+    private LocalTime appointmentSchedule;
     private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
     private AppointmentStatus status;
 }

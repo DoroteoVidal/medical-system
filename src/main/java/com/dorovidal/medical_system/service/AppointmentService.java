@@ -1,8 +1,12 @@
 package com.dorovidal.medical_system.service;
 
-import com.dorovidal.medical_system.dto.AppointmentRequestDto;
-import com.dorovidal.medical_system.dto.AppointmentResponseDto;
+import com.dorovidal.medical_system.dto.AppointmentDto;
+import com.dorovidal.medical_system.exception.AppointmentNotFoundException;
+import com.dorovidal.medical_system.exception.UserNotFoundException;
 
-public interface AppointmentService extends BaseService<AppointmentResponseDto, AppointmentRequestDto> {
+public interface AppointmentService {
 
+    AppointmentDto save(Long medicalScheduleId, Long patientId) throws AppointmentNotFoundException, UserNotFoundException;
+
+    void cancelAppointment(Long appointmentId) throws AppointmentNotFoundException;
 }

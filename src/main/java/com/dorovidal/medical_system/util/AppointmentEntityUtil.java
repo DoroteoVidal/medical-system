@@ -8,27 +8,24 @@ import java.time.LocalDateTime;
 
 public class AppointmentEntityUtil {
 
-    public static Appointment createEntity(Doctor doctor, Patient patient) {
+    public static Appointment createEntity(Doctor doctor, Patient patient, MedicalSchedule medicalSchedule) {
         Appointment appointment = new Appointment();
         appointment.setPatient(patient);
-        appointment.setDoctor(doctor);
         appointment.setCreatedAt(LocalDateTime.now());
+        appointment.setDateOfAppointment(medicalSchedule.getDateOfAppointment());
+        appointment.setAppointmentSchedule(medicalSchedule.getStartOfAppointment());
         appointment.setStatus(AppointmentStatus.RESERVED);
+        appointment.setMedicalSchedule(medicalSchedule);
 
         return appointment;
     }
 
-    public static AppointmentResponseDto toDto(Appointment appointment) {
-        AppointmentResponseDto appointmentResponseDto = new AppointmentResponseDto();
-        BeanUtils.copyProperties(appointment, appointmentResponseDto);
+    public static AppointmentDto toDto(Appointment appointment) {
+        AppointmentDto appointmentDto = new AppointmentDto();
+        BeanUtils.copyProperties(appointment, appointmentDto);
+        appointmentDto.setDoctor(appointment.getMedicalSchedule().getDoctor());
 
-        return appointmentResponseDto;
+        return appointmentDto;
     }
 
-    public static void copyProperties(Doctor doctor, Patient patient, AppointmentRequestDto appointmentDto, Appointment appointment) {
-        appointment.setPatient(patient);
-        appointment.setDoctor(doctor);
-        appointment.setSchedule(appointmentDto.getSchedule());
-        appointment.setUpdatedAt(LocalDateTime.now());
-    }
 }

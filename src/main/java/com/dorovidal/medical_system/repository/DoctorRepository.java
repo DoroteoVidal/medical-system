@@ -11,13 +11,22 @@ import java.util.Optional;
 public interface DoctorRepository extends JpaRepository<Doctor, Long> {
     @Query(
             "SELECT d FROM Doctor d " +
-                    "WHERE d.id = :doctorId AND d.user.enabled = true"
+            "WHERE d.id = :doctorId " +
+            "AND d.user.enabled = true"
     )
     Optional<Doctor> findByIdAndUserIsEnabled(Long doctorId);
 
     @Query(
             "SELECT d FROM Doctor d " +
-                    "WHERE d.dni = :dni AND d.user.enabled = true"
+            "WHERE d.dni = :dni " +
+            "AND d.user.enabled = true"
     )
     Optional<Doctor> findByDniAndUserIsEnabled(Long dni);
+
+    @Query(
+            "SELECT d FROM Doctor d " +
+            "WHERE d.user.email = :email " +
+            "AND d.user.enabled = true"
+    )
+    Optional<Doctor> findByUserEmail(String email);
 }
