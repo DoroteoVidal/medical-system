@@ -11,8 +11,10 @@ import java.time.LocalTime;
 @RequiredArgsConstructor
 public class MedicalScheduleResponseDto {
 
-    private Long id;
-    private Long doctorId;
+    private String name;
+    private String specialty;
+    private Long phone;
+    private Long dni;
     private LocalDate dateOfAppointment;
     private LocalTime startOfAppointment;
     private LocalTime endOfAppointment;

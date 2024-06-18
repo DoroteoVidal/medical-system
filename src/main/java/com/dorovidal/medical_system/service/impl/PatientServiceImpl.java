@@ -8,6 +8,7 @@ import com.dorovidal.medical_system.exception.UserNotFoundException;
 import com.dorovidal.medical_system.model.Patient;
 import com.dorovidal.medical_system.model.User;
 import com.dorovidal.medical_system.repository.PatientRepository;
+import com.dorovidal.medical_system.security.AuthorityConstant;
 import com.dorovidal.medical_system.security.PrincipalProvider;
 import com.dorovidal.medical_system.service.PatientService;
 import com.dorovidal.medical_system.service.UserService;
@@ -42,9 +43,8 @@ public class PatientServiceImpl implements PatientService {
 
     @Override
     @Transactional
-    public PatientResponseDto save(PatientRequestDto patientDto) throws UserFoundException {
+    public PatientResponseDto save(PatientRequestDto patientDto) throws UserFoundException, UserNotFoundException {
         User user = getUserByDni(patientDto.getDni());
-
         Patient patient = PatientEntityUtil.toEntity(patientDto);
         patient.setUser(user);
 

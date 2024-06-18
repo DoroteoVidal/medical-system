@@ -29,4 +29,7 @@ public interface DoctorRepository extends JpaRepository<Doctor, Long> {
             "AND d.user.enabled = true"
     )
     Optional<Doctor> findByUserEmail(String email);
+
+    Optional<Doctor> findByDni(Long dni);
+
 }
