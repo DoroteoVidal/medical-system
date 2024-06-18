@@ -18,6 +18,7 @@ public class MedicalScheduleEntityUtil {
         MedicalScheduleResponseDto responseDto = new MedicalScheduleResponseDto();
         BeanUtils.copyProperties(medicalSchedule, responseDto);
         responseDto.setDoctorId(medicalSchedule.getDoctor().getId());
+
         return responseDto;
     }
 }

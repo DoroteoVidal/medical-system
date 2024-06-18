@@ -5,6 +5,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,4 +26,12 @@ public interface MedicalScheduleRepository extends JpaRepository<MedicalSchedule
             "AND m.status = AVAILABLE"
     )
     Optional<MedicalSchedule> findByIdAndAvailable(Long id);
+
+    @Query(
+            "SELECT m FROM MedicalSchedule m " +
+            "WHERE m.dateOfAppointment = :dateOfAppointment " +
+            "AND m.startOfAppointment = :startOfAppointment"
+    )
+    boolean existsMedicalSchedule(LocalDate dateOfAppointment, LocalTime startOfAppointment);
+
 }

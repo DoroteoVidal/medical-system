@@ -2,6 +2,7 @@ package com.dorovidal.medical_system.service.impl;
 
 import com.dorovidal.medical_system.dto.MedicalScheduleRequestDto;
 import com.dorovidal.medical_system.dto.MedicalScheduleResponseDto;
+import com.dorovidal.medical_system.exception.AppointmentNotFoundException;
 import com.dorovidal.medical_system.exception.UserNotFoundException;
 import com.dorovidal.medical_system.model.AppointmentStatus;
 import com.dorovidal.medical_system.model.Doctor;
@@ -31,12 +32,18 @@ public class MedicalScheduleImpl implements MedicalScheduleService {
 
     @Override
     @Transactional
-    public MedicalScheduleResponseDto save(MedicalScheduleRequestDto dto) throws Exception {
+    public MedicalScheduleResponseDto save(MedicalScheduleRequestDto requestDto) throws UserNotFoundException, AppointmentNotFoundException {
         Doctor doctor = doctorRepository
                 .findByUserEmail(principalProvider.getPrincipal().getName())
                 .orElseThrow(() -> new UserNotFoundException("Doctor not found"));
 
-        MedicalSchedule medicalSchedule = MedicalScheduleEntityUtil.toEntity(dto);
+        if(medicalScheduleRepository.existsMedicalSchedule(requestDto.getDateOfAppointment(),
+                requestDto.getStartOfAppointment())) {
+            throw new AppointmentNotFoundException("There is already a medical schedule with this day: " +
+                    requestDto.getDateOfAppointment() + ", and time: " + requestDto.getStartOfAppointment());
+        }
+
+        MedicalSchedule medicalSchedule = MedicalScheduleEntityUtil.toEntity(requestDto);
         medicalSchedule.setDoctor(doctor);
         medicalSchedule.setStatus(AppointmentStatus.AVAILABLE);
 
@@ -44,24 +51,31 @@ public class MedicalScheduleImpl implements MedicalScheduleService {
     }
 
     @Override
-    public MedicalScheduleResponseDto update(Long id, MedicalScheduleRequestDto dto) throws Exception {
-        //Checkear que el estado este disponible antes de actualizar
-        return null;
+    @Transactional
+    public void delete(Long medicalScheduleId) throws AppointmentNotFoundException {
+        if (medicalScheduleRepository.findByIdAndAvailable(medicalScheduleId).isPresent()) {
+            medicalScheduleRepository.deleteById(medicalScheduleId);
+        } else {
+            throw new AppointmentNotFoundException("This medical schedule does not exist or is not available");
+        }
     }
 
     @Override
-    public void delete(Long id) throws Exception {
-        //Checkear que el estado este disponible antes de eliminar
+    @Transactional(readOnly = true)
+    public MedicalScheduleResponseDto getById(Long medicalScheduleId) throws AppointmentNotFoundException {
+        return MedicalScheduleEntityUtil
+                .toDto(medicalScheduleRepository
+                        .findById(medicalScheduleId).orElseThrow(
+                                () -> new AppointmentNotFoundException("The medical schedule does not exist")));
     }
 
     @Override
-    public MedicalScheduleResponseDto getById(Long id) throws Exception {
-        return null;
-    }
-
-    @Override
+    @Transactional(readOnly = true)
     public List<MedicalScheduleResponseDto> getAll() {
-        return List.of();
+        return medicalScheduleRepository.findAll()
+                .stream()
+                .map(MedicalScheduleEntityUtil::toDto)
+                .toList();
     }
 
     @Override

@@ -7,6 +7,7 @@ import com.dorovidal.medical_system.exception.UserFoundException;
 import com.dorovidal.medical_system.security.AuthorityConstant;
 import com.dorovidal.medical_system.service.PatientService;
 import jakarta.validation.Valid;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +18,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("patients")
+@Slf4j
 public class PatientController {
 
     @Autowired
@@ -28,6 +30,7 @@ public class PatientController {
         try{
             return ResponseEntity.status(HttpStatus.CREATED).body(patientService.save(patientDto));
         } catch (Exception e) {
+            log.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }
