@@ -1,9 +1,9 @@
 package com.dorovidal.medical_system.controller;
 
-import com.dorovidal.medical_system.dto.DoctorRequestDto;
-import com.dorovidal.medical_system.dto.DoctorResponseDto;
+import com.dorovidal.medical_system.dto.MedicalScheduleRequestDto;
+import com.dorovidal.medical_system.dto.MedicalScheduleResponseDto;
 import com.dorovidal.medical_system.security.AuthorityConstant;
-import com.dorovidal.medical_system.service.DoctorService;
+import com.dorovidal.medical_system.service.MedicalScheduleService;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,31 +15,19 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("doctors")
+@RequestMapping("medical-schedules")
 @Slf4j
-public class DoctorController {
+public class MedicalScheduleController {
 
     @Autowired
-    private DoctorService doctorService;
+    private MedicalScheduleService medicalScheduleService;
 
     @PostMapping
     @PreAuthorize("hasAnyAuthority(\"" + AuthorityConstant.DOCTOR + "\")")
-    public ResponseEntity<?> save(@RequestBody @Valid DoctorRequestDto doctorDto) {
+    public ResponseEntity<?> save(@RequestBody @Valid MedicalScheduleRequestDto requestDto) {
         try{
-            log.info("Saving: {}", doctorDto);
-            return ResponseEntity.status(HttpStatus.CREATED).body(doctorService.save(doctorDto));
-        } catch (Exception e) {
-            log.error(e.getMessage());
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-        }
-    }
-
-    @PutMapping("{id}")
-    @PreAuthorize("hasAnyAuthority(\"" + AuthorityConstant.DOCTOR + "\")")
-    public ResponseEntity<?> update(@PathVariable Long id, @RequestBody @Valid DoctorRequestDto doctorDto) {
-        try{
-            log.info("Updating by id: {}", id);
-            return ResponseEntity.status(HttpStatus.CREATED).body(doctorService.update(id, doctorDto));
+            log.info("Saving: {}", requestDto);
+            return ResponseEntity.status(HttpStatus.CREATED).body(medicalScheduleService.save(requestDto));
         } catch (Exception e) {
             log.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
@@ -52,7 +40,7 @@ public class DoctorController {
     public ResponseEntity<?> delete(@PathVariable Long id) {
         try{
             log.info("Removing by id: {}", id);
-            doctorService.delete(id);
+            medicalScheduleService.delete(id);
             return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
         } catch (Exception e) {
             log.error(e.getMessage());
@@ -64,7 +52,7 @@ public class DoctorController {
     public ResponseEntity<?> getById(@PathVariable Long id) {
         try{
             log.info("Getting by id: {}", id);
-            return ResponseEntity.status(HttpStatus.OK).body(doctorService.getById(id));
+            return ResponseEntity.status(HttpStatus.OK).body(medicalScheduleService.getById(id));
         } catch (Exception e) {
             log.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
@@ -74,8 +62,14 @@ public class DoctorController {
     @GetMapping
     @PreAuthorize("hasAnyAuthority(\"" + AuthorityConstant.ADMIN + "\") " +
             "or hasAnyAuthority(\"" + AuthorityConstant.DOCTOR + "\")")
-    public ResponseEntity<List<DoctorResponseDto>> getAll() {
+    public ResponseEntity<List<MedicalScheduleResponseDto>> getAll() {
         log.info("Get all...");
-        return ResponseEntity.status(HttpStatus.OK).body(doctorService.getAll());
+        return ResponseEntity.status(HttpStatus.OK).body(medicalScheduleService.getAll());
+    }
+
+    @GetMapping("by-doctor/{id}")
+    public ResponseEntity<List<MedicalScheduleResponseDto>> getAllByDoctorId(@PathVariable Long id) {
+        log.info("Get all by doctor id...");
+        return ResponseEntity.status(HttpStatus.OK).body(medicalScheduleService.getAvailableAppointmentsByDoctorId(id));
     }
 }

@@ -40,7 +40,7 @@ public class PatientController {
     public ResponseEntity<?> saveWithUser(@RequestBody @Valid PatientUserDto patientUserDto) {
         try{
             return ResponseEntity.status(HttpStatus.CREATED).body(patientService.saveWithUser(patientUserDto));
-        } catch (UserFoundException e) {
+        } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }

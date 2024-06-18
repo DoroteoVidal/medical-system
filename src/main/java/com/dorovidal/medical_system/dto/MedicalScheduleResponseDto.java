@@ -10,8 +10,8 @@ import java.time.LocalTime;
 @Data
 @RequiredArgsConstructor
 public class MedicalScheduleResponseDto {
-
-    private String name;
+    private Long id;
+    private String doctor;
     private String specialty;
     private Long phone;
     private Long dni;

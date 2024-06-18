@@ -37,8 +37,8 @@ public class MedicalScheduleImpl implements MedicalScheduleService {
                 .findByUserEmail(principalProvider.getPrincipal().getName())
                 .orElseThrow(() -> new UserNotFoundException("Doctor not found"));
 
-        if(medicalScheduleRepository.existsMedicalSchedule(requestDto.getDateOfAppointment(),
-                requestDto.getStartOfAppointment())) {
+        if(medicalScheduleRepository.findByDateTime(requestDto.getDateOfAppointment(),
+                requestDto.getStartOfAppointment()).isPresent()) {
             throw new AppointmentNotFoundException("There is already a medical schedule with this day: " +
                     requestDto.getDateOfAppointment() + ", and time: " + requestDto.getStartOfAppointment());
         }

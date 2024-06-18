@@ -23,7 +23,9 @@ public class AppointmentEntityUtil {
     public static AppointmentDto toDto(Appointment appointment) {
         AppointmentDto appointmentDto = new AppointmentDto();
         BeanUtils.copyProperties(appointment, appointmentDto);
-        appointmentDto.setDoctor(appointment.getMedicalSchedule().getDoctor());
+        appointmentDto.setPatient(appointment.getPatient().getName() + " " + appointment.getPatient().getLastname());
+        appointmentDto.setDoctor(appointment.getMedicalSchedule().getDoctor().getUser().getName() + " " +
+                appointment.getMedicalSchedule().getDoctor().getUser().getLastname());
 
         return appointmentDto;
     }

@@ -20,7 +20,8 @@ public class MedicalScheduleEntityUtil {
         responseDto.setDni(medicalSchedule.getDoctor().getDni());
         responseDto.setPhone(medicalSchedule.getDoctor().getPhone());
         responseDto.setSpecialty(medicalSchedule.getDoctor().getSpecialty());
-        responseDto.setName(medicalSchedule.getDoctor().getUser().getName());
+        responseDto.setDoctor(medicalSchedule.getDoctor().getUser().getName() + " " +
+                medicalSchedule.getDoctor().getUser().getLastname());
 
         return responseDto;
     }

@@ -32,6 +32,6 @@ public interface MedicalScheduleRepository extends JpaRepository<MedicalSchedule
             "WHERE m.dateOfAppointment = :dateOfAppointment " +
             "AND m.startOfAppointment = :startOfAppointment"
     )
-    boolean existsMedicalSchedule(LocalDate dateOfAppointment, LocalTime startOfAppointment);
+    Optional<MedicalSchedule> findByDateTime(LocalDate dateOfAppointment, LocalTime startOfAppointment);
 
 }

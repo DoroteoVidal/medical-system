@@ -15,6 +15,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
+import java.util.List;
 
 @Service
 public class AppointmentServiceImpl implements AppointmentService {
@@ -33,9 +35,15 @@ public class AppointmentServiceImpl implements AppointmentService {
 
     @Override
     @Transactional
-    public AppointmentDto save(Long medicalScheduleId, Long patientId) throws UserNotFoundException, AppointmentNotFoundException {
+    public AppointmentDto makeAnAppointment(Long medicalScheduleId, Long patientId) throws UserNotFoundException, AppointmentNotFoundException {
         MedicalSchedule medicalSchedule = medicalScheduleRepository.findByIdAndAvailable(medicalScheduleId)
-                .orElseThrow(() -> new AppointmentNotFoundException("Medical schedule does not exists"));
+                .orElseThrow(() -> new AppointmentNotFoundException("Medical schedule does not exists or has already been booked"));
+
+        if(LocalTime.now().equals(medicalSchedule.getStartOfAppointment()) && LocalDate.now().isEqual(medicalSchedule.getDateOfAppointment())||
+                LocalTime.now().isAfter(medicalSchedule.getStartOfAppointment()) && LocalDate.now().isEqual(medicalSchedule.getDateOfAppointment())) {
+            throw new AppointmentNotFoundException("You cannot reserve this appointment");
+        }
+
         Doctor doctor = doctorRepository
                 .findByIdAndUserIsEnabled(medicalSchedule.getDoctor().getId())
                 .orElseThrow(() -> new UserNotFoundException("The doctor does not exist"));
@@ -67,6 +75,14 @@ public class AppointmentServiceImpl implements AppointmentService {
         medicalSchedule.setStatus(AppointmentStatus.AVAILABLE);
         appointmentRepository.save(appointment);
         medicalScheduleRepository.save(medicalSchedule);
+    }
+
+    @Override
+    public List<AppointmentDto> getAllByPatientId(Long patientId) {
+        return appointmentRepository.findByPatientId(patientId)
+                .stream()
+                .map(AppointmentEntityUtil::toDto)
+                .toList();
     }
 
 }
