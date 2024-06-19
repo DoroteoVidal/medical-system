@@ -18,4 +18,6 @@ public interface MedicalScheduleService {
     List<MedicalScheduleResponseDto> getAll();
 
     List<MedicalScheduleResponseDto> getAvailableAppointmentsByDoctorId(Long doctorId);
+
+    void completeMedicalSchedule(Long medicalScheduleId) throws AppointmentNotFoundException;
 }

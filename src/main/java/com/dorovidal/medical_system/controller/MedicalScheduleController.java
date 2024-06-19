@@ -2,6 +2,7 @@ package com.dorovidal.medical_system.controller;
 
 import com.dorovidal.medical_system.dto.MedicalScheduleRequestDto;
 import com.dorovidal.medical_system.dto.MedicalScheduleResponseDto;
+import com.dorovidal.medical_system.exception.AppointmentNotFoundException;
 import com.dorovidal.medical_system.security.AuthorityConstant;
 import com.dorovidal.medical_system.service.MedicalScheduleService;
 import jakarta.validation.Valid;
@@ -71,5 +72,18 @@ public class MedicalScheduleController {
     public ResponseEntity<List<MedicalScheduleResponseDto>> getAllByDoctorId(@PathVariable Long id) {
         log.info("Get all by doctor id...");
         return ResponseEntity.status(HttpStatus.OK).body(medicalScheduleService.getAvailableAppointmentsByDoctorId(id));
+    }
+
+    @GetMapping("complete/{id}")
+    @PreAuthorize("hasAnyAuthority(\"" + AuthorityConstant.DOCTOR + "\")")
+    public ResponseEntity<?> completeById(@PathVariable Long id) {
+        try{
+            log.info("Completing by id: {}", id);
+            medicalScheduleService.completeMedicalSchedule(id);
+            return ResponseEntity.status(HttpStatus.OK).build();
+        } catch (AppointmentNotFoundException e) {
+            log.error(e.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
     }
 }

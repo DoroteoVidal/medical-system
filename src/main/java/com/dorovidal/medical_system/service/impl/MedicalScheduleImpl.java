@@ -4,9 +4,11 @@ import com.dorovidal.medical_system.dto.MedicalScheduleRequestDto;
 import com.dorovidal.medical_system.dto.MedicalScheduleResponseDto;
 import com.dorovidal.medical_system.exception.AppointmentNotFoundException;
 import com.dorovidal.medical_system.exception.UserNotFoundException;
+import com.dorovidal.medical_system.model.Appointment;
 import com.dorovidal.medical_system.model.AppointmentStatus;
 import com.dorovidal.medical_system.model.Doctor;
 import com.dorovidal.medical_system.model.MedicalSchedule;
+import com.dorovidal.medical_system.repository.AppointmentRepository;
 import com.dorovidal.medical_system.repository.DoctorRepository;
 import com.dorovidal.medical_system.repository.MedicalScheduleRepository;
 import com.dorovidal.medical_system.security.PrincipalProvider;
@@ -29,6 +31,9 @@ public class MedicalScheduleImpl implements MedicalScheduleService {
 
     @Autowired
     private PrincipalProvider principalProvider;
+
+    @Autowired
+    private AppointmentRepository appointmentRepository;
 
     @Override
     @Transactional
@@ -85,5 +90,26 @@ public class MedicalScheduleImpl implements MedicalScheduleService {
                 .stream()
                 .map(MedicalScheduleEntityUtil::toDto)
                 .toList();
+    }
+
+    @Override
+    public void completeMedicalSchedule(Long medicalScheduleId) throws AppointmentNotFoundException {
+        MedicalSchedule medicalSchedule = medicalScheduleRepository.findById(medicalScheduleId)
+                .orElseThrow(() ->  new AppointmentNotFoundException("The medical schedule does not exist"));
+
+        if(medicalSchedule.getStatus().equals(AppointmentStatus.RESERVED)) {
+            Appointment appointment = appointmentRepository.findByMedicalScheduleId(medicalScheduleId)
+                    .orElseThrow(() -> new AppointmentNotFoundException("Medical schedule not found"));
+            if(appointment.getStatus().equals(AppointmentStatus.RESERVED)) {
+                medicalSchedule.setStatus(AppointmentStatus.COMPLETED);
+                appointment.setStatus(AppointmentStatus.COMPLETED);
+                medicalScheduleRepository.save(medicalSchedule);
+                appointmentRepository.save(appointment);
+            } else {
+                throw new AppointmentNotFoundException("Can't complete appointment");
+            }
+        } else {
+            throw new AppointmentNotFoundException("Can't complete medical schedule");
+        }
     }
 }
