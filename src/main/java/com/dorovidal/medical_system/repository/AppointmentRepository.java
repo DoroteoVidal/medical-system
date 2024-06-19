@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface AppointmentRepository extends JpaRepository<Appointment, Long> {
@@ -15,4 +16,10 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Long> 
             "WHERE a.patient.id = :patientId"
     )
     List<Appointment> findByPatientId(Long patientId);
+
+    @Query(
+            "SELECT a FROM Appointment a " +
+            "WHERE a.medicalSchedule.id = :medicalScheduleId"
+    )
+    Optional<Appointment> findByMedicalScheduleId(Long medicalScheduleId);
 }

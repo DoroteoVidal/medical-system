@@ -72,6 +72,7 @@ public class AppointmentServiceImpl implements AppointmentService {
         MedicalSchedule medicalSchedule = appointment.getMedicalSchedule();
 
         appointment.setStatus(AppointmentStatus.CANCELED);
+        appointment.setMedicalSchedule(null);
         medicalSchedule.setStatus(AppointmentStatus.AVAILABLE);
         appointmentRepository.save(appointment);
         medicalScheduleRepository.save(medicalSchedule);

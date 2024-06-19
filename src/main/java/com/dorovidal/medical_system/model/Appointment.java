@@ -22,8 +22,6 @@ public class Appointment {
 
     private LocalDateTime createdAt;
 
-    private LocalDateTime updatedAt;
-
     @ManyToOne(fetch = FetchType.EAGER)
     private Patient patient;
 
