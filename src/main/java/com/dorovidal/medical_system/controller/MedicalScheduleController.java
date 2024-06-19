@@ -78,7 +78,7 @@ public class MedicalScheduleController {
     @PreAuthorize("hasAnyAuthority(\"" + AuthorityConstant.DOCTOR + "\")")
     public ResponseEntity<?> completeById(@PathVariable Long id) {
         try{
-            log.info("Completing by id: {}", id);
+            log.info("Completing medical schedule...");
             medicalScheduleService.completeMedicalSchedule(id);
             return ResponseEntity.status(HttpStatus.OK).build();
         } catch (AppointmentNotFoundException e) {
