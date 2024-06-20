@@ -44,20 +44,24 @@ public class AppointmentServiceImpl implements AppointmentService {
             throw new AppointmentNotFoundException("You cannot reserve this appointment");
         }
 
-        Doctor doctor = doctorRepository
-                .findByIdAndUserIsEnabled(medicalSchedule.getDoctor().getId())
-                .orElseThrow(() -> new UserNotFoundException("The doctor does not exist"));
         Patient patient = patientRepository
                 .findById(patientId)
                 .orElseThrow(() -> new UserNotFoundException("The patient does not exist"));
 
-        Appointment appointment = AppointmentEntityUtil.createEntity(doctor, patient, medicalSchedule);
+        Appointment appointment = AppointmentEntityUtil.createEntity(patient, medicalSchedule);
         medicalSchedule.setStatus(AppointmentStatus.RESERVED);
         Appointment appointmentSaved = appointmentRepository.save(appointment);
 
         return AppointmentEntityUtil.toDto(appointmentSaved);
     }
 
+    /**
+     * Los turnos solamente se pueden cancelar con un dia de anticipación.
+     *
+     * @param appointmentId id del turno que se va a cancelar.
+     * @throws AppointmentNotFoundException En caso que no se pueda cancelar debido al
+     * horario o no exista dicho turno.
+     */
     @Override
     @Transactional
     public void cancelAppointment(Long appointmentId) throws AppointmentNotFoundException {
