@@ -26,7 +26,7 @@ public class DoctorController {
     @PreAuthorize("hasAnyAuthority(\"" + AuthorityConstant.DOCTOR + "\")")
     public ResponseEntity<?> save(@RequestBody @Valid DoctorRequestDto doctorDto) {
         try{
-            log.info("Saving: {}", doctorDto);
+            log.info("Save doctor: {}", doctorDto);
             return ResponseEntity.status(HttpStatus.CREATED).body(doctorService.save(doctorDto));
         } catch (Exception e) {
             log.error(e.getMessage());
@@ -38,7 +38,7 @@ public class DoctorController {
     @PreAuthorize("hasAnyAuthority(\"" + AuthorityConstant.DOCTOR + "\")")
     public ResponseEntity<?> update(@PathVariable Long id, @RequestBody @Valid DoctorRequestDto doctorDto) {
         try{
-            log.info("Updating by id: {}", id);
+            log.info("Update doctor by id: {}", id);
             return ResponseEntity.status(HttpStatus.CREATED).body(doctorService.update(id, doctorDto));
         } catch (Exception e) {
             log.error(e.getMessage());
@@ -51,7 +51,7 @@ public class DoctorController {
             "or hasAnyAuthority(\"" + AuthorityConstant.DOCTOR + "\")")
     public ResponseEntity<?> delete(@PathVariable Long id) {
         try{
-            log.info("Removing by id: {}", id);
+            log.info("Delete doctor by id: {}", id);
             doctorService.delete(id);
             return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
         } catch (Exception e) {
@@ -63,7 +63,7 @@ public class DoctorController {
     @GetMapping("{id}")
     public ResponseEntity<?> getById(@PathVariable Long id) {
         try{
-            log.info("Getting by id: {}", id);
+            log.info("Get doctor by id: {}", id);
             return ResponseEntity.status(HttpStatus.OK).body(doctorService.getById(id));
         } catch (Exception e) {
             log.error(e.getMessage());
@@ -75,7 +75,7 @@ public class DoctorController {
     @PreAuthorize("hasAnyAuthority(\"" + AuthorityConstant.ADMIN + "\") " +
             "or hasAnyAuthority(\"" + AuthorityConstant.DOCTOR + "\")")
     public ResponseEntity<List<DoctorResponseDto>> getAll() {
-        log.info("Get all...");
+        log.info("Get all doctors...");
         return ResponseEntity.status(HttpStatus.OK).body(doctorService.getAll());
     }
 }

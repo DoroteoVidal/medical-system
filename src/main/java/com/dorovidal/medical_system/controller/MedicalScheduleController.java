@@ -27,7 +27,7 @@ public class MedicalScheduleController {
     @PreAuthorize("hasAnyAuthority(\"" + AuthorityConstant.DOCTOR + "\")")
     public ResponseEntity<?> save(@RequestBody @Valid MedicalScheduleRequestDto requestDto) {
         try{
-            log.info("Saving: {}", requestDto);
+            log.info("Save medical schedule: {}", requestDto);
             return ResponseEntity.status(HttpStatus.CREATED).body(medicalScheduleService.save(requestDto));
         } catch (Exception e) {
             log.error(e.getMessage());
@@ -40,7 +40,7 @@ public class MedicalScheduleController {
             "or hasAnyAuthority(\"" + AuthorityConstant.DOCTOR + "\")")
     public ResponseEntity<?> delete(@PathVariable Long id) {
         try{
-            log.info("Removing by id: {}", id);
+            log.info("Delete medical schedule by id: {}", id);
             medicalScheduleService.delete(id);
             return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
         } catch (Exception e) {
@@ -52,7 +52,7 @@ public class MedicalScheduleController {
     @GetMapping("{id}")
     public ResponseEntity<?> getById(@PathVariable Long id) {
         try{
-            log.info("Getting by id: {}", id);
+            log.info("Get medical schedule by id: {}", id);
             return ResponseEntity.status(HttpStatus.OK).body(medicalScheduleService.getById(id));
         } catch (Exception e) {
             log.error(e.getMessage());
@@ -64,13 +64,13 @@ public class MedicalScheduleController {
     @PreAuthorize("hasAnyAuthority(\"" + AuthorityConstant.ADMIN + "\") " +
             "or hasAnyAuthority(\"" + AuthorityConstant.DOCTOR + "\")")
     public ResponseEntity<List<MedicalScheduleResponseDto>> getAll() {
-        log.info("Get all...");
+        log.info("Get all medical schedules...");
         return ResponseEntity.status(HttpStatus.OK).body(medicalScheduleService.getAll());
     }
 
     @GetMapping("by-doctor/{id}")
     public ResponseEntity<List<MedicalScheduleResponseDto>> getAllByDoctorId(@PathVariable Long id) {
-        log.info("Get all by doctor id...");
+        log.info("Get all medical schedules by doctor id...");
         return ResponseEntity.status(HttpStatus.OK).body(medicalScheduleService.getAvailableAppointmentsByDoctorId(id));
     }
 

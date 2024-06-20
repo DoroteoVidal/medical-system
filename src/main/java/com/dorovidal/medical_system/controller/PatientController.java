@@ -3,7 +3,6 @@ package com.dorovidal.medical_system.controller;
 import com.dorovidal.medical_system.dto.PatientRequestDto;
 import com.dorovidal.medical_system.dto.PatientResponseDto;
 import com.dorovidal.medical_system.dto.PatientUserDto;
-import com.dorovidal.medical_system.exception.UserFoundException;
 import com.dorovidal.medical_system.security.AuthorityConstant;
 import com.dorovidal.medical_system.service.PatientService;
 import jakarta.validation.Valid;
@@ -28,6 +27,7 @@ public class PatientController {
     @PreAuthorize("hasAnyAuthority(\"" + AuthorityConstant.USER + "\")")
     public ResponseEntity<?> save(@RequestBody @Valid PatientRequestDto patientDto) {
         try{
+            log.info("Save patient: {}", patientDto);
             return ResponseEntity.status(HttpStatus.CREATED).body(patientService.save(patientDto));
         } catch (Exception e) {
             log.error(e.getMessage());
@@ -39,8 +39,10 @@ public class PatientController {
     @PreAuthorize("hasAnyAuthority(\"" + AuthorityConstant.USER + "\")")
     public ResponseEntity<?> saveWithUser(@RequestBody @Valid PatientUserDto patientUserDto) {
         try{
+            log.info("Save patient with user data: {}", patientUserDto);
             return ResponseEntity.status(HttpStatus.CREATED).body(patientService.saveWithUser(patientUserDto));
         } catch (Exception e) {
+            log.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }
@@ -49,8 +51,10 @@ public class PatientController {
     @PreAuthorize("hasAnyAuthority(\"" + AuthorityConstant.USER + "\")")
     public ResponseEntity<?> update(@PathVariable Long id, @RequestBody @Valid PatientRequestDto patientDto) {
         try{
+            log.info("Update patient by id: {}", id);
             return ResponseEntity.status(HttpStatus.CREATED).body(patientService.update(id, patientDto));
         } catch (Exception e) {
+            log.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }
@@ -60,9 +64,11 @@ public class PatientController {
             "or hasAnyAuthority(\"" + AuthorityConstant.USER + "\")")
     public ResponseEntity<?> delete(@PathVariable Long id) {
         try{
+            log.info("Delete patient by id: {}", id);
             patientService.delete(id);
             return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
         } catch (Exception e) {
+            log.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }
@@ -70,8 +76,10 @@ public class PatientController {
     @GetMapping("{id}")
     public ResponseEntity<?> getById(@PathVariable Long id) {
         try{
+            log.info("Get patient by id: {}", id);
             return ResponseEntity.status(HttpStatus.OK).body(patientService.getById(id));
         } catch (Exception e) {
+            log.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }
@@ -80,6 +88,7 @@ public class PatientController {
     @PreAuthorize("hasAnyAuthority(\"" + AuthorityConstant.ADMIN + "\") " +
             "or hasAnyAuthority(\"" + AuthorityConstant.USER + "\")")
     public ResponseEntity<List<PatientResponseDto>> getAll() {
+        log.info("Get all patients...");
         return ResponseEntity.status(HttpStatus.OK).body(patientService.getAll());
     }
 }

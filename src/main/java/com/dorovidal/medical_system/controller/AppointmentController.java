@@ -1,7 +1,6 @@
 package com.dorovidal.medical_system.controller;
 
 import com.dorovidal.medical_system.dto.AppointmentDto;
-import com.dorovidal.medical_system.dto.DoctorResponseDto;
 import com.dorovidal.medical_system.security.AuthorityConstant;
 import com.dorovidal.medical_system.service.AppointmentService;
 import lombok.extern.slf4j.Slf4j;
@@ -26,7 +25,7 @@ public class AppointmentController {
     public ResponseEntity<?> makeAnAppointment(@RequestParam(name = "medical-schedule") Long medicalScheduleId,
                                                @RequestParam(name = "patient") Long patientId) {
         try{
-            log.info("Saving...");
+            log.info("Save appointment...");
             return ResponseEntity.status(HttpStatus.CREATED).body(appointmentService.makeAnAppointment(medicalScheduleId, patientId));
         } catch (Exception e) {
             log.error(e.getMessage());
@@ -38,7 +37,7 @@ public class AppointmentController {
     @PreAuthorize("hasAnyAuthority(\"" + AuthorityConstant.USER + "\")")
     public ResponseEntity<?> cancelAppointment(@PathVariable Long id) {
         try{
-            log.info("Removing by id: {}", id);
+            log.info("Remove appointment by id: {}", id);
             appointmentService.cancelAppointment(id);
             return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
         } catch (Exception e) {
@@ -50,7 +49,7 @@ public class AppointmentController {
     @GetMapping("by-patient/{id}")
     @PreAuthorize("hasAnyAuthority(\"" + AuthorityConstant.USER + "\")")
     public ResponseEntity<List<AppointmentDto>> getAllByPatientId(@PathVariable Long id) {
-        log.info("Get all by patient id...");
+        log.info("Get all appointments by patient id...");
         return ResponseEntity.status(HttpStatus.OK).body(appointmentService.getAllByPatientId(id));
     }
 }

@@ -23,7 +23,7 @@ public class MedicalHistoryController {
     @PreAuthorize("hasAnyAuthority(\"" + AuthorityConstant.DOCTOR + "\")")
     public ResponseEntity<?> saveByMedicalScheduleId(@RequestBody MedicalHistoryDto dto, @PathVariable Long id) {
         try{
-            log.info("Saving: {}", dto);
+            log.info("Save medical history: {}", dto);
             return ResponseEntity.status(HttpStatus.CREATED).body(medicalHistoryService.save(dto, id));
         } catch (AppointmentNotFoundException e) {
             log.error(e.getMessage());
@@ -35,7 +35,7 @@ public class MedicalHistoryController {
     @PreAuthorize("hasAnyAuthority(\"" + AuthorityConstant.USER + "\")")
     public ResponseEntity<?> getByPatientId(@PathVariable Long id) {
         try{
-            log.info("Get all by patient id...");
+            log.info("Get all medical histories by patient id...");
             return ResponseEntity.status(HttpStatus.OK).body(medicalHistoryService.getAllByPatientId(id));
         } catch (Exception e) {
             log.error(e.getMessage());
@@ -47,7 +47,7 @@ public class MedicalHistoryController {
     @PreAuthorize("hasAnyAuthority(\"" + AuthorityConstant.USER + "\")")
     public ResponseEntity<?> getById(@PathVariable Long id) {
         try{
-            log.info("Getting by id: {}", id);
+            log.info("Get medical history by id: {}", id);
             return ResponseEntity.status(HttpStatus.OK).body(medicalHistoryService.getById(id));
         } catch (Exception e) {
             log.error(e.getMessage());
