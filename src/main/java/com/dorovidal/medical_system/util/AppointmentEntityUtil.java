@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 
 public class AppointmentEntityUtil {
 
-    public static Appointment createEntity(Patient patient, MedicalSchedule medicalSchedule) {
+    public static Appointment createEntity(Doctor doctor, Patient patient, MedicalSchedule medicalSchedule) {
         Appointment appointment = new Appointment();
         appointment.setPatient(patient);
         appointment.setCreatedAt(LocalDateTime.now());
@@ -24,6 +24,8 @@ public class AppointmentEntityUtil {
         AppointmentDto appointmentDto = new AppointmentDto();
         BeanUtils.copyProperties(appointment, appointmentDto);
         appointmentDto.setPatient(appointment.getPatient().getName() + " " + appointment.getPatient().getLastname());
+        appointmentDto.setDoctor(appointment.getMedicalSchedule().getDoctor().getUser().getName() + " " +
+                appointment.getMedicalSchedule().getDoctor().getUser().getLastname());
 
         return appointmentDto;
     }
